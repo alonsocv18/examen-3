@@ -1,0 +1,61 @@
+<div class="auth-container">
+  <form id="register-form" action="" method="POST" class="auth-form">
+    <h1 class="auth-form__title">Regístrate</h1>
+    <div class="auth-form__field">
+      <label for="email" class="auth-form__label">Correo</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        class="auth-form__input"
+        required
+        autocomplete="email"
+        placeholder="Ingresa tu correo electrónico"
+      />
+    </div>
+
+    <div class="auth-form__field">
+      <label for="username" class="auth-form__label">Nombre de usuario</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        class="auth-form__input"
+        required
+        autocomplete="username"
+        placeholder="Ingresa tu nombre de usuario"
+      />
+    </div>
+    <div class="auth-form__field">
+      <label for="phone" class="auth-form__label">Telefono</label>
+      <input
+        type="tel"
+        id="telfono"
+        name="telefono"
+        class="auth-form__input"
+        required
+        autocomplete="tel"
+        placeholder="Ingresa tu número de teléfono"
+      />
+    </div>
+
+    <div class="auth-form__field">
+      <label for="password" class="auth-form__label">Contraseña</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        class="auth-form__input"
+        required
+        autocomplete="new-password"
+        placeholder="Ingresa tu contraseña"
+      />
+    </div>
+    <div class="auth-form__end-section">
+      <p-button styleClass="w-[390px] h-12" label="Regístrate"></p-button>
+      <label for="email" class="auth-form__label" (click)="irAlogin()"
+        >¿Ya tienes cuenta? <strong class="cursor-pointer">Inicia Sesión</strong></label
+      >
+    </div>
+  </form>
+</div>

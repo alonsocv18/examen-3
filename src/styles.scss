@@ -1,0 +1,51 @@
+@import 'tailwindcss';
+
+p-button {
+  --p-button-primary-background: #000000;
+  --p-button-primary-hover-background: #000000;
+  --p-button-primary-active-background: #000000;
+
+  --p-button-link-color: #ffffff;
+  --p-button-link-hover-color: #ffffff;
+  --p-button-link-active-color: #ffffff;
+
+  --p-button-primary-color: #ffffff;
+  --p-button-primary-hover-color: #ffffff;
+  --p-button-primary-active-color: #ffffff;
+
+  --p-button-primary-border-color: #000000;
+  --p-button-primary-hover-border-color: #000000;
+  --p-button-primary-active-border-color: #000000;
+
+  --p-button-primary-focus-ring-color: #000000;
+  --p-button-primary-focus-ring-shadow: none;
+}
+
+/* --- ESTILOS AUTH (login y registro) --- */
+.auth-container {
+  @apply flex flex-col items-center justify-center min-h-screen bg-white;
+}
+
+.auth-form {
+  @apply bg-white rounded-lg shadow-xl/20 p-10 w-120 h-auto flex flex-col gap-6;
+}
+
+.auth-form__title {
+  @apply text-3xl font-bold text-gray-900 pb-2;
+}
+
+.auth-form__field {
+  @apply flex flex-col gap-2;
+}
+
+.auth-form__label {
+  @apply text-gray-700 font-medium text-base;
+}
+
+.auth-form__input {
+  @apply w-full px-4 py-3 rounded-xl bg-gray-200 border border-transparent focus:outline-none focus:ring-1 focus:ring-gray-400 text-gray-900 text-base placeholder-gray-400;
+}
+
+.auth-form__end-section {
+  @apply flex flex-col items-center pt-3 gap-5;
+}
