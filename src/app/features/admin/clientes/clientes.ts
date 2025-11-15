@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ClientesService, Cliente } from '../../../core/services/clientes.service';
+import { Component } from '@angular/core';
+// import { ClientesService, Cliente } from '../../../core/services/clientes.service';
 
 @Component({
   selector: 'app-clientes',
@@ -7,34 +7,42 @@ import { ClientesService, Cliente } from '../../../core/services/clientes.servic
   templateUrl: './clientes.html',
   styleUrl: './clientes.scss',
 })
-export class Clientes implements OnInit {
+export class Clientes {
   showModalCliente: boolean = false;
-  clientes: Cliente[] = [];
-  isLoading: boolean = false;
+  showModalEditar: boolean = false;
+  clienteSeleccionado: any = null;
+  clientes = [
+    {
+      id: 1,
+      nombre: 'Juan Pérez',
+      tipoDocumento: 'DNI',
+      numDocumento: '12345678',
+      telefono: '987654321',
+      correo: 'juan.perez@example.com',
+      estado: 'Activo',
+    },
+    {
+      id: 2,
+      nombre: 'Ana Torres',
+      tipoDocumento: 'RUC',
+      numDocumento: '20123456789',
+      telefono: '912345678',
+      correo: 'ana.torres@empresa.com',
+      estado: 'Inactivo',
+    },
+    {
+      id: 3,
+      nombre: 'Carlos Ruiz',
+      tipoDocumento: 'DNI',
+      numDocumento: '87654321',
+      telefono: '998877665',
+      correo: 'carlos.ruiz@mail.com',
+      estado: 'Activo',
+    },
+  ];
 
-  constructor(private clientesService: ClientesService) {}
-
-  ngOnInit() {
-    this.cargarClientes();
-  }
-
-  // GET - Cargar todos los clientes
-  cargarClientes() {
-    this.isLoading = true;
-    this.clientesService.getClientes().subscribe({
-      next: (data) => {
-        this.clientes = data;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error al cargar clientes:', error);
-        this.isLoading = false;
-      },
-    });
-  }
-
-  // POST - Crear nuevo cliente
   crearCliente(data: {
+    id?: number;
     nombre: string;
     tipoDocumento: string;
     numDocumento: string;
@@ -43,47 +51,49 @@ export class Clientes implements OnInit {
     estado: string;
   }) {
     if (data.nombre.trim()) {
-      this.clientesService.crearCliente(data).subscribe({
-        next: (clienteCreado) => {
-          console.log('Cliente creado:', clienteCreado);
-          this.showModalCliente = false;
-          this.cargarClientes(); // Recargar lista
-        },
-        error: (error) => {
-          console.error('Error al crear cliente:', error);
-        },
+      this.clientes.push({
+        id: this.clientes.length + 1,
+        ...data,
       });
+      this.showModalCliente = false;
     }
   }
 
-  // PUT - Actualizar cliente
-  actualizarCliente(id: number, data: Cliente) {
-    this.clientesService.actualizarCliente(id, data).subscribe({
-      next: (cliente) => {
-        console.log('Cliente actualizado:', cliente);
-        const index = this.clientes.findIndex((c) => c.id === id);
-        if (index !== -1) {
-          this.clientes[index] = cliente;
-        }
-      },
-      error: (error) => {
-        console.error('Error al actualizar cliente:', error);
-      },
-    });
+  actualizarCliente(data: {
+    id?: number;
+    nombre: string;
+    tipoDocumento: string;
+    numDocumento: string;
+    telefono: string;
+    correo: string;
+    estado: string;
+  }) {
+    if (data.id && data.nombre.trim()) {
+      const index = this.clientes.findIndex((c) => c.id === data.id);
+      if (index !== -1) {
+        this.clientes[index] = {
+          id: data.id,
+          nombre: data.nombre,
+          tipoDocumento: data.tipoDocumento,
+          numDocumento: data.numDocumento,
+          telefono: data.telefono,
+          correo: data.correo,
+          estado: data.estado,
+        };
+      }
+      this.showModalEditar = false;
+      this.clienteSeleccionado = null;
+    }
   }
 
-  // DELETE - Eliminar cliente
-  eliminarCliente(id: number) {
-    if (confirm('¿Estás seguro de eliminar este cliente?')) {
-      this.clientesService.eliminarCliente(id).subscribe({
-        next: () => {
-          console.log('Cliente eliminado');
-          this.clientes = this.clientes.filter((c) => c.id !== id);
-        },
-        error: (error) => {
-          console.error('Error al eliminar cliente:', error);
-        },
-      });
+  editarCliente(cliente: any) {
+    this.clienteSeleccionado = { ...cliente };
+    this.showModalEditar = true;
+  }
+
+  eliminarCliente(cliente: any) {
+    if (confirm(`¿Estás seguro de eliminar a ${cliente.nombre}?`)) {
+      this.clientes = this.clientes.filter((c) => c.id !== cliente.id);
     }
   }
 }

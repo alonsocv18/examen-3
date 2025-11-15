@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
+// import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-subcategoria',
@@ -7,17 +7,49 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './subcategoria.html',
   styleUrl: './subcategoria.scss',
 })
-export class Subcategoria implements OnInit {
+export class Subcategoria {
   showModalProducto: boolean = false;
+  showModalEditar: boolean = false;
+  productoSeleccionado: any = null;
+  showModal: boolean = false;
+  idSubcategoria: string = '3';
+  nombreSubcategoria: string = 'Extras';
+  idCategoria: string = '2';
+  nombreCategoria: string = 'Pollo a la brasa';
+
+  productos: { id: number; nombre: string; precio: number }[] = [
+    { id: 1, nombre: 'Porción de papas', precio: 5 },
+    { id: 2, nombre: 'Ensalada extra', precio: 4 },
+    { id: 3, nombre: 'Arroz chaufa', precio: 8 },
+    { id: 4, nombre: 'Gaseosa 500ml', precio: 3 },
+  ];
+
   crearProducto(data: { nombre: string; stock: number; precio: number }) {
     if (data.nombre.trim()) {
-      // Aquí podrías agregar lógica para guardar el producto
-      // Por ahora solo cierra el modal
-      // Ejemplo: alert('Producto creado: ' + data.nombre);
+      this.productos.push({
+        id: this.productos.length + 1,
+        nombre: data.nombre,
+        precio: data.precio,
+      });
       this.showModalProducto = false;
     }
   }
-  showModal: boolean = false;
+
+  actualizarProducto(data: { id?: number; nombre: string; stock: number; precio: number }) {
+    if (data.id && data.nombre.trim()) {
+      const index = this.productos.findIndex((p) => p.id === data.id);
+      if (index !== -1) {
+        this.productos[index] = {
+          id: data.id,
+          nombre: data.nombre,
+          precio: data.precio,
+        };
+      }
+      this.showModalEditar = false;
+      this.productoSeleccionado = null;
+    }
+  }
+
   crearSubcategoria(data: { nombre: string }) {
     if (data.nombre.trim()) {
       // Aquí podrías agregar lógica para guardar la subcategoría
@@ -26,35 +58,15 @@ export class Subcategoria implements OnInit {
       this.showModal = false;
     }
   }
-  idSubcategoria: string = '';
-  nombreSubcategoria: string = '';
-  idCategoria: string = '';
-  nombreCategoria: string = '';
 
-  constructor(private route: ActivatedRoute) {}
-
-  // testing
-  productosPorSubcategoria: { [key: string]: { id: number; nombre: string; precio: number }[] } = {
-    '3': [
-      // id de subcategoría "Extras"
-      { id: 1, nombre: 'Porción de papas', precio: 5 },
-      { id: 2, nombre: 'Ensalada extra', precio: 4 },
-      // ...
-    ],
-    // otras subcategorías...
-  };
-
-  get productos() {
-    return this.productosPorSubcategoria[this.idSubcategoria] || [];
+  editarProducto(producto: any) {
+    this.productoSeleccionado = { ...producto };
+    this.showModalEditar = true;
   }
 
-  ngOnInit() {
-    // Obtener todos los parámetros de la ruta actual
-    this.route.params.subscribe((params) => {
-      this.idSubcategoria = params['id_subcategoria'];
-      this.nombreSubcategoria = params['nombre_subcategoria'];
-      this.idCategoria = params['id'];
-      this.nombreCategoria = params['nombre'];
-    });
+  eliminarProducto(producto: any) {
+    if (confirm(`¿Estás seguro de eliminar ${producto.nombre}?`)) {
+      this.productos = this.productos.filter((p) => p.id !== producto.id);
+    }
   }
 }

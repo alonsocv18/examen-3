@@ -21,6 +21,7 @@ import { CrearCategoriaForm } from './forms/crear-categoria-form/crear-categoria
 import { CrearProductoForm } from './forms/crear-producto-form/crear-producto-form';
 import { CrearSubcategoriaForm } from './forms/crear-subcategoria-form/crear-subcategoria-form';
 import { CrearClienteForm } from './forms/crear-cliente-form/crear-cliente-form';
+import { CrearSalonForm } from './forms/crear-salon-form/crear-salon-form';
 @NgModule({
   declarations: [
     Header,
@@ -34,6 +35,7 @@ import { CrearClienteForm } from './forms/crear-cliente-form/crear-cliente-form'
     CrearProductoForm,
     CrearSubcategoriaForm,
     CrearClienteForm,
+    CrearSalonForm,
   ],
   imports: [
     CommonModule,
@@ -67,6 +69,7 @@ import { CrearClienteForm } from './forms/crear-cliente-form/crear-cliente-form'
     CrearProductoForm,
     CrearSubcategoriaForm,
     CrearClienteForm,
+    CrearSalonForm,
     FormsModule,
   ],
 })

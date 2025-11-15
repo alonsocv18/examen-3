@@ -1,14 +1,8 @@
 <div class="page-section__header">
-  <div class="page-section__header-icon">
-    <!--AQUI VA UN ICONO GAA-->
-  </div>
   <h1 class="page-section__header-title">Clientes</h1>
 </div>
 <p-divider type="solid" />
 <div class="page-section__header">
-  <div class="page-section__header-icon">
-    <!--AQUI VA UN ICONO GAA-->
-  </div>
   <input type="text" placeholder="Buscar categoria" pInputText fluid />
   <app-selector></app-selector>
   <p-button
@@ -26,6 +20,18 @@
       (cancelar)="showModalCliente = false"
     ></app-crear-cliente-form>
   </app-modal>
+
+  <app-modal
+    [visible]="showModalEditar"
+    (visibleChange)="showModalEditar = $event"
+    header="Editar Cliente"
+  >
+    <app-crear-cliente-form
+      [clienteEditar]="clienteSeleccionado"
+      (guardar)="actualizarCliente($event)"
+      (cancelar)="showModalEditar = false; clienteSeleccionado = null"
+    ></app-crear-cliente-form>
+  </app-modal>
 </div>
 <!--- CRUD usuarios  --->
 <div class="px-10">
@@ -40,6 +46,8 @@
       { field: 'acciones', header: 'Acciones' }
     ]"
     [data]="clientes"
+    (edit)="editarCliente($event)"
+    (delete)="eliminarCliente($event)"
   >
   </app-table>
 </div>

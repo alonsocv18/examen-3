@@ -41,6 +41,18 @@
         (cancelar)="showModalProducto = false"
       ></app-crear-producto-form>
     </app-modal>
+
+    <app-modal
+      [visible]="showModalEditar"
+      (visibleChange)="showModalEditar = $event"
+      header="Editar Producto"
+    >
+      <app-crear-producto-form
+        [productoEditar]="productoSeleccionado"
+        (guardar)="actualizarProducto($event)"
+        (cancelar)="showModalEditar = false; productoSeleccionado = null"
+      ></app-crear-producto-form>
+    </app-modal>
   </div>
 
   <div class="px-10">
@@ -53,6 +65,8 @@
         { field: 'acciones', header: 'Acciones' }
       ]"
       [data]="productos"
+      (edit)="editarProducto($event)"
+      (delete)="eliminarProducto($event)"
     >
     </app-table>
   </div>

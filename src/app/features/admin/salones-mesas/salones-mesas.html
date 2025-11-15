@@ -1,9 +1,6 @@
 <div class="page-section">
   <!-- Header -->
   <div class="page-section__header">
-    <div class="page-section__header-icon">
-      <!--AQUI VA UN ICONO GAA-->
-    </div>
     <h1 class="page-section__header-title">Salones y mesas</h1>
   </div>
 
@@ -20,120 +17,54 @@
 
       <!-- Search Bar -->
       <div class="page-section__search">
-        <input pInputText type="text" pSize="large" placeholder="Buscar" />
-        <p-button styleClass="h-12 w-12" label="+" (click)="showDialog()"></p-button>
-        <app-modal [visible]="showModal" (visibleChange)="closeDialog()" header="Crear Salón">
-          <form class="p-0 m-0" (ngSubmit)="crearSalon()">
-            <div class="form-modal__group">
-              <span class="form-modal__label">
-                <i class="pi pi-table form-modal__label-icon"></i>
-                Cantidad de mesas
-              </span>
-              <div class="form-modal__stepper">
-                <button
-                  type="button"
-                  class="form-modal__stepper-btn"
-                  (click)="
-                    nuevoSalon.cantidadMesas =
-                      nuevoSalon.cantidadMesas > 0 ? nuevoSalon.cantidadMesas - 1 : 0
-                  "
-                >
-                  &minus;
-                </button>
-                <span class="form-modal__stepper-value">{{
-                  nuevoSalon.cantidadMesas | number : '2.0'
-                }}</span>
-                <button
-                  type="button"
-                  class="form-modal__stepper-btn"
-                  (click)="nuevoSalon.cantidadMesas = nuevoSalon.cantidadMesas + 1"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            <div class="form-modal__group">
-              <label class="form-modal__label">Nombre del salón</label>
-              <input
-                type="text"
-                class="form-modal__input"
-                [(ngModel)]="nuevoSalon.nombre"
-                name="nuevoSalonNombre"
-                placeholder="Ejm: Terraza"
-              />
-            </div>
-
-            <div class="form-modal__footer">
-              <button
-                type="button"
-                (click)="closeDialog()"
-                class="form-modal__button form-modal__button--cancel"
-              >
-                <svg
-                  class="form-modal__button-icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="15" y1="9" x2="9" y2="15" />
-                  <line x1="9" y1="9" x2="15" y2="15" />
-                </svg>
-                <span>Cancelar</span>
-              </button>
-              <button type="submit" class="form-modal__button form-modal__button--save">
-                <svg
-                  class="form-modal__button-icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-                  <polyline points="17 21 17 13 7 13 7 21" />
-                  <polyline points="7 3 7 8 15 8" />
-                </svg>
-                <span>Guardar cambios</span>
-              </button>
-            </div>
-          </form>
-        </app-modal>
+        <input pInputText type="text" pSize="large" placeholder="Buscar salón" />
+        <p-button styleClass="h-12 w-12" label="+" (click)="showModal = true"></p-button>
       </div>
+
+      <!-- Modal Crear Salón -->
+      <app-modal [visible]="showModal" (visibleChange)="showModal = $event" header="Crear Salón">
+        <app-crear-salon-form
+          (guardar)="crearSalon($event)"
+          (cancelar)="showModal = false"
+        ></app-crear-salon-form>
+      </app-modal>
 
       <!-- Salones List -->
       <div class="page-section__list">
-        <!-- Implementando salones -->
-        <div class="page-section__item" *ngFor="let salon of salones; let i = index">
+        <!-- Mensaje de carga -->
+        <div *ngIf="loadingSalones" class="page-section__loading">
+          <p>Cargando salones...</p>
+        </div>
+
+        <!-- Mensaje si no hay salones -->
+        <div *ngIf="!loadingSalones && salones.length === 0" class="page-section__empty">
+          <p>No hay salones disponibles</p>
+        </div>
+
+        <!-- Lista de salones -->
+        <div
+          class="page-section__item"
+          *ngFor="let salon of salones; let i = index"
+          [class.page-section__item--selected]="salonSeleccionado?.lounge_id === salon.lounge_id"
+          (click)="seleccionarSalon(salon)"
+        >
           <div class="page-section__item-header">
-            <h3 class="page-section__item-name">{{ salon.nombre }}</h3>
+            <h3 class="page-section__item-name">{{ salon.lounge_name }}</h3>
           </div>
           <div class="page-section__item-info">
-            <!-- AQUI VA UN SVG ICONO -->
-            <span class="page-section__item-count">{{ salon.cantidadMesas }} mesas</span>
+            <span class="page-section__item-count">{{ salon.cantidad_mesas }} mesas</span>
             <span
               class="page-section__item-status"
-              [class.page-section__item-status--active]="true"
-              [class.page-section__item-status--inactive]="false"
+              [class.page-section__item-status--active]="salon.lounge_state === 'activo'"
+              [class.page-section__item-status--inactive]="salon.lounge_state !== 'activo'"
             >
-              Activo
+              {{ salon.lounge_state === 'activo' ? 'Activo' : 'Inactivo' }}
             </span>
           </div>
           <div class="page-section__item-actions">
             <button
               class="page-section__item-button page-section__item-button--edit"
-              (click)="openModal(i)"
+              (click)="abrirModalEditar(salon); $event.stopPropagation()"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -148,72 +79,11 @@
               </svg>
               Editar
             </button>
-            <app-modal
-              [visible]="modalIndex === i"
-              (visibleChange)="closeModal()"
-              [header]="'Editar Salón'"
-            >
-              <form (ngSubmit)="guardarCambios(i)">
-                <div class="form-modal__group">
-                  <label class="form-modal__label">Nombre del salón</label>
-                  <input
-                    type="text"
-                    class="form-modal__input"
-                    [(ngModel)]="salones[i].nombre"
-                    name="nombreSalon{{ i }}"
-                    placeholder="Ejm: Terraza"
-                  />
-                </div>
-                <div class="form-modal__footer">
-                  <button
-                    type="button"
-                    (click)="closeModal()"
-                    class="form-modal__button form-modal__button--cancel"
-                  >
-                    <svg
-                      class="form-modal__button-icon"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <line x1="15" y1="9" x2="9" y2="15" />
-                      <line x1="9" y1="9" x2="15" y2="15" />
-                    </svg>
-                    <span>Cancelar</span>
-                  </button>
-                  <button type="submit" class="form-modal__button form-modal__button--save">
-                    <svg
-                      class="form-modal__button-icon"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-                      <polyline points="17 21 17 13 7 13 7 21" />
-                      <polyline points="7 3 7 8 15 8" />
-                    </svg>
-                    <span>Guardar cambios</span>
-                  </button>
-                </div>
-              </form>
-            </app-modal>
 
             <button
-              *ngIf="true"
+              *ngIf="salon.lounge_state === 'activo'"
               class="page-section__item-button page-section__item-button--inactive"
+              (click)="cambiarEstadoSalon(salon); $event.stopPropagation()"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -230,8 +100,9 @@
               Inactivar
             </button>
             <button
-              *ngIf="!true"
+              *ngIf="salon.lounge_state !== 'activo'"
               class="page-section__item-button page-section__item-button--active"
+              (click)="cambiarEstadoSalon(salon); $event.stopPropagation()"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -249,58 +120,109 @@
           </div>
         </div>
       </div>
+
+      <!-- Modal Editar Salón -->
+      <app-modal
+        [visible]="showModalEditar"
+        (visibleChange)="showModalEditar = $event"
+        header="Editar Salón"
+      >
+        <app-crear-salon-form
+          [salonEditar]="salonParaEditar"
+          (guardar)="actualizarSalon($event)"
+          (cancelar)="showModalEditar = false; salonParaEditar = null"
+        ></app-crear-salon-form>
+      </app-modal>
     </div>
 
     <p-divider layout="vertical" />
 
     <!-- Lado derecho: Mesas de cada salón -->
     <div class="page-section__main">
-      <div class="page-section__main-header">
-        <svg
-          class="page-section__main-icon"
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"></path>
-          <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"></path>
-          <path d="M12 3v6"></path>
-        </svg>
-        <h2 class="page-section__main-title">Mesas del salon Pollito pio</h2>
-      </div>
-      <p-divider type="solid" />
-      <!-- Table Header -->
-      <div class="page-section__table-header">
-        <div class="page-section__table-col page-section__table-col--mesa">Mesa</div>
-        <div class="page-section__table-col page-section__table-col--acciones">Acciones</div>
+      <!-- Mostrar cuando NO hay salón seleccionado -->
+      <div *ngIf="!salonSeleccionado" class="page-section__placeholder">
+        <p>Selecciona un salón para ver sus mesas</p>
       </div>
 
-      <p-divider type="solid" />
+      <!-- Mostrar cuando SÍ hay salón seleccionado -->
+      <div *ngIf="salonSeleccionado">
+        <div class="page-section__main-header">
+          <svg
+            class="page-section__main-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"></path>
+            <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"></path>
+            <path d="M12 3v6"></path>
+          </svg>
+          <h2 class="page-section__main-title">
+            Mesas del salón {{ salonSeleccionado.lounge_name }}
+          </h2>
+        </div>
+        <p-divider type="solid" />
 
-      <!-- Table Rows -->
-      <div class="page-section__table-body">
-        <!-- Ejemplo de row - usar con *ngFor="let mesa of mesas" -->
-        <div class="page-section__table-row">
-          <div class="page-section__table-cell">Mesa 1</div>
-          <div class="page-section__table-cell page-section__table-cell--actions">
-            <button class="page-section__table-button">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
-              </svg>
-            </button>
+        <!-- Mensaje de carga de mesas -->
+        <div *ngIf="loadingMesas" class="page-section__loading">
+          <p>Cargando mesas...</p>
+        </div>
+
+        <!-- Tabla de mesas -->
+        <div *ngIf="!loadingMesas && mesas.length > 0">
+          <!-- Table Header -->
+          <div class="page-section__table-header">
+            <div class="page-section__table-col page-section__table-col--mesa">Mesa</div>
+            <div class="page-section__table-col page-section__table-col--mozo">Mozo</div>
+            <div class="page-section__table-col page-section__table-col--estado">Estado</div>
+            <div class="page-section__table-col page-section__table-col--acciones">Acciones</div>
           </div>
+
+          <p-divider type="solid" />
+
+          <!-- Table Rows -->
+          <div class="page-section__table-body">
+            <div
+              class="page-section__table-row"
+              *ngFor="let mesa of mesas"
+              [class.page-section__table-row--selected]="
+                mesaSeleccionada?.tablee_id === mesa.tablee_id
+              "
+              (click)="seleccionarMesa(mesa)"
+            >
+              <div class="page-section__table-cell">{{ mesa.tablee_name }}</div>
+              <div class="page-section__table-cell">{{ mesa.tablee_mozo || 'Sin asignar' }}</div>
+              <div class="page-section__table-cell">{{ mesa.tablee_state }}</div>
+              <div class="page-section__table-cell page-section__table-cell--actions">
+                <button
+                  class="page-section__table-button"
+                  (click)="verMesa(mesa); $event.stopPropagation()"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mensaje si no hay mesas -->
+        <div *ngIf="!loadingMesas && mesas.length === 0" class="page-section__empty">
+          <span>No hay mesas </span>
         </div>
       </div>
     </div>
