@@ -11,40 +11,66 @@ export class CrearProductoForm implements OnChanges {
   @Output() guardar = new EventEmitter<{
     id?: number;
     nombre: string;
-    stock: number;
     precio: number;
+    descripcion: string;
+    imagen: string;
+    stock: number;
+    necesitaPreparacion: boolean;
   }>();
   @Output() cancelar = new EventEmitter<void>();
 
   nombre: string = '';
-  stock: number = 0;
   precio: number = 0;
+  descripcion: string = '';
+  imagen: string = '';
+  stock: number = 0;
+  necesitaPreparacion: boolean = true;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['productoEditar'] && this.productoEditar) {
-      this.nombre = this.productoEditar.nombre || '';
-      this.stock = this.productoEditar.stock || 0;
-      this.precio = this.productoEditar.precio || 0;
+      this.nombre = this.productoEditar.product_name || this.productoEditar.nombre || '';
+      this.precio = this.productoEditar.product_price || this.productoEditar.precio || 0;
+      this.descripcion =
+        this.productoEditar.product_description || this.productoEditar.descripcion || '';
+      this.imagen = this.productoEditar.product_urlimage || this.productoEditar.imagen || '';
+      this.stock = this.productoEditar.product_stock || this.productoEditar.stock || 0;
+      this.necesitaPreparacion =
+        this.productoEditar.product_needpreparation === '1' ||
+        this.productoEditar.necesitaPreparacion === true;
     }
   }
 
   onSubmit() {
     if (this.nombre.trim()) {
-      const data: any = { nombre: this.nombre, stock: this.stock, precio: this.precio };
-      if (this.productoEditar && this.productoEditar.id) {
-        data.id = this.productoEditar.id;
+      const data: any = {
+        nombre: this.nombre,
+        precio: this.precio,
+        descripcion: this.descripcion,
+        imagen: this.imagen || 'default.png',
+        stock: this.stock,
+        necesitaPreparacion: this.necesitaPreparacion,
+      };
+      if (this.productoEditar && (this.productoEditar.product_id || this.productoEditar.id)) {
+        data.id = this.productoEditar.product_id || this.productoEditar.id;
       }
       this.guardar.emit(data);
-      this.nombre = '';
-      this.stock = 0;
-      this.precio = 0;
+      this.limpiar();
     }
   }
 
   onCancel() {
     this.cancelar.emit();
-    this.nombre = '';
-    this.stock = 0;
-    this.precio = 0;
+    this.limpiar();
+  }
+
+  limpiar() {
+    if (!this.productoEditar) {
+      this.nombre = '';
+      this.precio = 0;
+      this.descripcion = '';
+      this.imagen = '';
+      this.stock = 0;
+      this.necesitaPreparacion = true;
+    }
   }
 }

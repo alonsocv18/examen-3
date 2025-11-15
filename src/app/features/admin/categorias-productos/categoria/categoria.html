@@ -5,16 +5,43 @@
   >
 </div>
 <p-divider type="solid" />
-<span class="pl-10 page-section__header-subtitle">Subcategorias:</span>
+<div class="flex items-center justify-between px-10">
+  <span class="page-section__header-subtitle">Subcategorias:</span>
+  <p-button
+    label="Crear subcategoría"
+    size="small"
+    (click)="showModalSubcategoria = true"
+  ></p-button>
+</div>
+
+<!-- Modal Crear Subcategoría -->
+<app-modal
+  [visible]="showModalSubcategoria"
+  (visibleChange)="showModalSubcategoria = $event"
+  header="Crear Subcategoría"
+>
+  <app-crear-categoria-form
+    (guardar)="crearSubcategoria($event)"
+    (cancelar)="showModalSubcategoria = false"
+  ></app-crear-categoria-form>
+</app-modal>
+
+<div *ngIf="isLoadingSubcategorias" class="px-10 py-4">
+  <p>Cargando subcategorías...</p>
+</div>
+
 <div class="grid grid-cols-5 gap-4 py-4 px-10">
   <app-card
     *ngFor="let sub of subcategorias"
-    [id]="sub.id"
-    [nombre]="sub.nombre"
+    [nombre]="sub.category_name"
     [cantidad]="0"
     [disableNavigation]="true"
-    (click)="irASubcategoria(sub.id, sub.nombre)"
+    (click)="irASubcategoria(sub)"
   ></app-card>
+</div>
+
+<div *ngIf="!isLoadingSubcategorias && subcategorias.length === 0" class="px-10 py-2">
+  <p class="text-gray-500">No hay subcategorías</p>
 </div>
 <div class="flex flex-row px-10 gap-2">
   <input type="text" placeholder="Buscar productos de la categoria" pInputText fluid />
@@ -49,14 +76,19 @@
 
 <!--- CRUD PRODUCTOS --->
 <div class="px-10">
+  <div *ngIf="isLoadingProductos" class="py-4">
+    <p>Cargando productos...</p>
+  </div>
+
   <app-table
+    *ngIf="!isLoadingProductos"
     [columns]="[
-      { field: 'nombre', header: 'Producto' },
-      { field: 'stock', header: 'Stock' },
-      { field: 'precio', header: 'Precio' },
+      { field: 'product_name', header: 'Producto' },
+      { field: 'product_stock', header: 'Stock' },
+      { field: 'product_price', header: 'Precio' },
       { field: 'acciones', header: 'Acciones' }
     ]"
-    [data]="productosFiltrados"
+    [data]="productos"
     (edit)="editarProducto($event)"
     (delete)="eliminarProducto($event)"
   >

@@ -1,5 +1,12 @@
-import { Component } from '@angular/core';
-// import { CategoriasService, Categoria } from '../../../core/services/categorias.service';
+import { Component, OnInit } from '@angular/core';
+import { CategoryService } from '../../../core/services/category.service';
+import { ProductService } from '../../../core/services/product.service';
+import { Category } from '../../../core/interfaces/category.interface';
+import { forkJoin } from 'rxjs';
+
+interface CategoryWithCount extends Category {
+  productCount?: number;
+}
 
 @Component({
   selector: 'app-categorias-productos',
@@ -7,104 +14,161 @@ import { Component } from '@angular/core';
   templateUrl: './categorias-productos.html',
   styleUrl: './categorias-productos.scss',
 })
-export class CategoriasProductos {
+export class CategoriasProductos implements OnInit {
   showModalCategoria: boolean = false;
-  // categorias: Categoria[] = [];
-  // isLoading: boolean = false;
+  showModalEditar: boolean = false;
+  categoriaEditar: Category | null = null;
+  categorias: CategoryWithCount[] = [];
+  isLoading: boolean = false;
 
-  // constructor(private categoriasService: CategoriasService) {}
+  constructor(private categoryService: CategoryService, private productService: ProductService) {}
 
-  // ngOnInit() {
-  //   this.cargarCategorias();
-  // }
+  ngOnInit() {
+    this.cargarCategorias();
+  }
 
-  // GET - Cargar todas las categorías
-  // cargarCategorias() {
-  //   this.isLoading = true;
-  //   this.categoriasService.getCategorias().subscribe({
-  //     next: (data) => {
-  //       this.categorias = data;
-  //       this.isLoading = false;
-  //     },
-  //     error: (error) => {
-  //       console.error('Error al cargar categorías:', error);
-  //       this.isLoading = false;
-  //       // Aquí puedes mostrar un mensaje de error al usuario
-  //     },
-  //   });
-  // }
+  // GET - Cargar todas las categorías padre (category_categoryid = 0)
+  cargarCategorias() {
+    this.isLoading = true;
+    // isPadre=1 filtra solo categorías padre
+    this.categoryService.getCategories(undefined, undefined, 1, 1).subscribe({
+      next: (response) => {
+        console.log('Respuesta de categorías:', response);
+        if (response.tipo === '1' && response.data) {
+          const categorias = response.data;
+          // Cargar productos de cada categoría para obtener el count
+          this.cargarConteoProductos(categorias);
+        } else {
+          this.categorias = [];
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar categorías:', error);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  // Cargar conteo de productos para cada categoría
+  cargarConteoProductos(categorias: Category[]) {
+    if (categorias.length === 0) {
+      this.categorias = [];
+      this.isLoading = false;
+      return;
+    }
+
+    // Hacer solicitudes paralelas para obtener productos de cada categoría
+    const requests = categorias.map((cat) =>
+      this.productService.getProducts(undefined, cat.category_id)
+    );
+
+    forkJoin(requests).subscribe({
+      next: (responses) => {
+        this.categorias = categorias.map((cat, index) => {
+          const response = responses[index];
+          const productCount = response.tipo === '1' && response.data ? response.data.length : 0;
+          return { ...cat, productCount };
+        });
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar conteo de productos:', error);
+        // Aún así mostrar las categorías sin el conteo
+        this.categorias = categorias.map((cat) => ({ ...cat, productCount: 0 }));
+        this.isLoading = false;
+      },
+    });
+  }
 
   // POST - Crear nueva categoría
-  crearCategoria(data: { nombre: string }) {
-    // const nuevaCategoria: Categoria = {
-    //   nombre: data.nombre,
-    //   activo: true,
-    // };
+  crearCategoria(data: { nombre: string; imagen: string }) {
+    const storeId = parseInt(localStorage.getItem('store_id') || '1', 10);
 
-    // this.categoriasService.crearCategoria(nuevaCategoria).subscribe({
-    //   next: (categoriaCreada) => {
-    //     console.log('Categoría creada:', categoriaCreada);
-    //     this.showModalCategoria = false;
-    //     // Recargar la lista de categorías
-    //     this.cargarCategorias();
-    //     // O agregar directamente a la lista:
-    //     // this.categorias.push(categoriaCreada);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error al crear categoría:', error);
-    //     // Mostrar mensaje de error al usuario
-    //   },
-    // });
-    this.categorias.push({ id: this.categorias.length + 1, nombre: data.nombre, cantidad: 0 });
-    this.showModalCategoria = false;
+    const nuevaCategoria = {
+      category_name: data.nombre,
+      category_categoryid: 0, // 0 = categoría padre
+      category_urlimage: data.imagen || 'default.png',
+      category_state: '1', // 1 = activo
+      store_id: storeId,
+    };
+
+    this.categoryService.createCategory(nuevaCategoria).subscribe({
+      next: (response) => {
+        console.log('Categoría creada:', response);
+        if (response.tipo === '1') {
+          this.showModalCategoria = false;
+          this.cargarCategorias();
+        }
+      },
+      error: (error) => {
+        console.error('Error al crear categoría:', error);
+      },
+    });
+  }
+
+  // Abrir modal para edición
+  abrirModalEditar(categoria: Category) {
+    this.categoriaEditar = { ...categoria };
+    this.showModalEditar = true;
   }
 
   // PUT - Actualizar categoría
-  // actualizarCategoria(id: number, data: { nombre: string }) {
-  //   const categoriaActualizada: Categoria = {
-  //     nombre: data.nombre,
-  //     activo: true,
-  //   };
+  actualizarCategoria(data: { id?: number; nombre: string; imagen: string }) {
+    if (!this.categoriaEditar || !data.id) return;
 
-  //   this.categoriasService.actualizarCategoria(id, categoriaActualizada).subscribe({
-  //     next: (categoria) => {
-  //       console.log('Categoría actualizada:', categoria);
-  //       // Actualizar la lista local
-  //       const index = this.categorias.findIndex((c) => c.id === id);
-  //       if (index !== -1) {
-  //         this.categorias[index] = categoria;
-  //       }
-  //     },
-  //     error: (error) => {
-  //       console.error('Error al actualizar categoría:', error);
-  //     },
-  //   });
-  // }
+    const categoriaActualizada = {
+      category_id: data.id,
+      category_name: data.nombre,
+      category_categoryid: this.categoriaEditar.category_categoryid,
+      category_urlimage: data.imagen || 'default.png',
+      category_state: this.categoriaEditar.category_state,
+      store_id: this.categoriaEditar.store_id,
+    };
 
-  // DELETE - Eliminar categoría
-  // eliminarCategoria(id: number) {
-  //   if (confirm('¿Estás seguro de eliminar esta categoría?')) {
-  //     this.categoriasService.eliminarCategoria(id).subscribe({
-  //       next: () => {
-  //         console.log('Categoría eliminada');
-  //         // Remover de la lista local
-  //         this.categorias = this.categorias.filter((c) => c.id !== id);
-  //       },
-  //       error: (error) => {
-  //         console.error('Error al eliminar categoría:', error);
-  //       },
-  //     });
-  //   }
-  // }
+    this.categoryService.updateCategory(categoriaActualizada).subscribe({
+      next: (response) => {
+        console.log('Categoría actualizada:', response);
+        if (response.tipo === '1') {
+          this.showModalEditar = false;
+          this.categoriaEditar = null;
+          this.cargarCategorias();
+        }
+      },
+      error: (error) => {
+        console.error('Error al actualizar categoría:', error);
+      },
+    });
+  }
 
-  categorias = [
-    { id: 1, nombre: 'Bebidas', cantidad: 24 },
-    { id: 2, nombre: 'Pollo a la brasa', cantidad: 21 },
-    { id: 3, nombre: 'Combos Familiares', cantidad: 11 },
-    { id: 4, nombre: 'Pollo Broaster', cantidad: 15 },
-    { id: 5, nombre: 'Piezas de Pollo a la Brasa', cantidad: 5 },
-    { id: 6, nombre: 'tryrty', cantidad: 0 },
-    { id: 7, nombre: 'Prueba Academia EDIT', cantidad: 0 },
-    { id: 8, nombre: 'Eldersito', cantidad: 0 },
-  ];
+  // Cambiar estado de categoría
+  cambiarEstadoCategoria(categoria: Category) {
+    const nuevoEstado = categoria.category_state === '1' ? '0' : '1';
+
+    const categoriaActualizada = {
+      category_id: categoria.category_id,
+      category_name: categoria.category_name,
+      category_categoryid: categoria.category_categoryid,
+      category_urlimage: categoria.category_urlimage,
+      category_state: nuevoEstado,
+      store_id: categoria.store_id,
+    };
+
+    this.categoryService.updateCategory(categoriaActualizada).subscribe({
+      next: (response) => {
+        console.log('Estado cambiado:', response);
+        if (response.tipo === '1') {
+          this.cargarCategorias();
+        }
+      },
+      error: (error) => {
+        console.error('Error al cambiar estado:', error);
+      },
+    });
+  }
+
+  // Helper para determinar si está activo
+  esActivo(estado: string): boolean {
+    return estado === '1';
+  }
 }

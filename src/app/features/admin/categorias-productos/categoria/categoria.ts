@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
-// import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CategoryService } from '../../../../core/services/category.service';
+import { ProductService } from '../../../../core/services/product.service';
+import { Category } from '../../../../core/interfaces/category.interface';
+import { Product } from '../../../../core/interfaces/product.interface';
 
 @Component({
   selector: 'app-categoria',
@@ -7,118 +11,230 @@ import { Component } from '@angular/core';
   templateUrl: './categoria.html',
   styleUrl: './categoria.scss',
 })
-export class Categoria {
+export class Categoria implements OnInit {
   showModalProducto: boolean = false;
   showModalEditar: boolean = false;
-  productoSeleccionado: any = null;
-  showModal: boolean = false;
-  idCategoria: string = '2';
-  nombreCategoria: string = 'Pollo a la brasa';
-  // private categoriaIdOriginal: string = '';
-  // private categoriaNombreOriginal: string = '';
+  showModalSubcategoria: boolean = false;
+  productoSeleccionado: Product | null = null;
+  idCategoria: number = 0;
+  nombreCategoria: string = '';
 
-  subcategoriasPorCategoria: { [key: string]: { id: number; nombre: string }[] } = {
-    '1': [
-      { id: 1, nombre: 'Bebidas Frias' },
-      { id: 2, nombre: 'Bebidas Calientes' },
-    ],
-    '2': [{ id: 3, nombre: 'Extras' }],
-    // Agrega más categorías y subcategorías según tu necesidad
-  };
+  subcategorias: Category[] = [];
+  productos: Product[] = [];
+  isLoadingSubcategorias = false;
+  isLoadingProductos = false;
 
-  get subcategorias() {
-    return this.subcategoriasPorCategoria[this.idCategoria] || [];
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private categoryService: CategoryService,
+    private productService: ProductService
+  ) {}
 
-  productos = [
-    { id: 1, nombre: '1/2 Pollo a la brasa', stock: 10, precio: 40, categoriaId: 2, activo: true },
-    { id: 2, nombre: '1/4 Pollo a la brasa', stock: 19, precio: 15, categoriaId: 2, activo: false },
-    {
-      id: 3,
-      nombre: '1 Pollo entero a la brasa',
-      stock: 36,
-      precio: 65.9,
-      categoriaId: 2,
-      activo: false,
-    },
-    { id: 4, nombre: '1/8 Pollo a la brasa', stock: 18, precio: 12, categoriaId: 2, activo: false },
-    { id: 5, nombre: 'Parte Contramuslo', stock: 20, precio: 8, categoriaId: 2, activo: false },
-    { id: 6, nombre: 'Parte Ala', stock: 15, precio: 7, categoriaId: 2, activo: false },
-    { id: 6, nombre: 'Parte Ala', stock: 15, precio: 7, categoriaId: 1, activo: false },
-  ];
-
-  get productosFiltrados() {
-    return this.productos.filter((p) => p.categoriaId === Number(this.idCategoria));
-  }
-
-  // constructor(private route: ActivatedRoute, private router: Router) {}
-
-  // ngOnInit() {
-  //   // Suscribirse solo para detectar cambios cuando vuelves con el navegador
-  //   this.route.paramMap.subscribe((params) => {
-  //     const id = params.get('id') || '';
-  //     const nombre = params.get('nombre') || '';
-  //     // Solo actualizar si los parámetros son de categoría (no de subcategoría)
-  //     if (id !== '' && nombre !== '' && !params.has('id_subcategoria')) {
-  //       this.idCategoria = id;
-  //       this.nombreCategoria = nombre;
-  //       this.categoriaIdOriginal = id;
-  //       this.categoriaNombreOriginal = nombre;
-  //     }
-  //   });
-  // }
-
-  crearProducto(data: { nombre: string; stock: number; precio: number }) {
-    if (data.nombre.trim()) {
-      this.productos.push({
-        id: this.productos.length + 1,
-        nombre: data.nombre,
-        stock: data.stock,
-        precio: data.precio,
-        categoriaId: Number(this.idCategoria),
-        activo: true,
-      });
-      this.showModalProducto = false;
-    }
-  }
-
-  actualizarProducto(data: { id?: number; nombre: string; stock: number; precio: number }) {
-    if (data.id && data.nombre.trim()) {
-      const index = this.productos.findIndex((p) => p.id === data.id);
-      if (index !== -1) {
-        this.productos[index] = {
-          id: data.id,
-          nombre: data.nombre,
-          stock: data.stock,
-          precio: data.precio,
-          categoriaId: this.productos[index].categoriaId,
-          activo: this.productos[index].activo,
-        };
+  ngOnInit() {
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      const nombre = params.get('nombre');
+      if (id && nombre) {
+        this.idCategoria = Number(id);
+        this.nombreCategoria = nombre;
+        this.cargarSubcategorias();
+        this.cargarProductos();
       }
-      this.showModalEditar = false;
-      this.productoSeleccionado = null;
-    }
+    });
   }
 
-  editarProducto(producto: any) {
+  // Cargar subcategorías de esta categoría
+  cargarSubcategorias() {
+    this.isLoadingSubcategorias = true;
+    // Filtrar por category_categoryid = idCategoria (subcategorías de esta categoría)
+    this.categoryService.getCategories(undefined, this.idCategoria, 1, undefined).subscribe({
+      next: (response) => {
+        console.log('Respuesta subcategorías:', response);
+        if (response.tipo === '1' && response.data) {
+          this.subcategorias = response.data;
+        } else {
+          this.subcategorias = [];
+        }
+        this.isLoadingSubcategorias = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar subcategorías:', error);
+        this.subcategorias = [];
+        this.isLoadingSubcategorias = false;
+      },
+    });
+  }
+
+  // Cargar productos de esta categoría
+  cargarProductos() {
+    this.isLoadingProductos = true;
+    this.productService.getProducts(undefined, this.idCategoria).subscribe({
+      next: (response) => {
+        console.log('Respuesta productos:', response);
+        if (response.tipo === '1' && response.data) {
+          this.productos = response.data;
+        } else {
+          this.productos = [];
+        }
+        this.isLoadingProductos = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar productos:', error);
+        this.productos = [];
+        this.isLoadingProductos = false;
+      },
+    });
+  }
+
+  // POST - Crear nuevo producto
+  crearProducto(data: {
+    nombre: string;
+    precio: number;
+    descripcion: string;
+    imagen: string;
+    stock: number;
+    necesitaPreparacion: boolean;
+  }) {
+    const storeId = parseInt(localStorage.getItem('store_id') || '1', 10);
+
+    const nuevoProducto = {
+      product_name: data.nombre,
+      product_price: data.precio,
+      product_description: data.descripcion,
+      product_urlimage: data.imagen || 'default.png',
+      product_state: '1',
+      product_stock: data.stock,
+      product_needpreparation: data.necesitaPreparacion ? '1' : '0',
+      category_id: this.idCategoria,
+      store_id: storeId,
+    };
+
+    this.productService.createProduct(nuevoProducto).subscribe({
+      next: (response) => {
+        console.log('Producto creado:', response);
+        if (response.tipo === '1') {
+          this.showModalProducto = false;
+          this.cargarProductos();
+        }
+      },
+      error: (error) => {
+        console.error('Error al crear producto:', error);
+      },
+    });
+  }
+
+  // PUT - Actualizar producto
+  actualizarProducto(data: {
+    id?: number;
+    nombre: string;
+    precio: number;
+    descripcion: string;
+    imagen: string;
+    stock: number;
+    necesitaPreparacion: boolean;
+  }) {
+    if (!this.productoSeleccionado || !data.id) return;
+
+    const productoActualizado = {
+      product_id: data.id,
+      product_name: data.nombre,
+      product_price: data.precio,
+      product_description: data.descripcion,
+      product_urlimage: data.imagen || 'default.png',
+      product_state: this.productoSeleccionado.product_state,
+      product_stock: data.stock,
+      product_needpreparation: data.necesitaPreparacion ? '1' : '0',
+      category_id: this.productoSeleccionado.category_id,
+      store_id: this.productoSeleccionado.store_id,
+    };
+
+    this.productService.updateProduct(productoActualizado).subscribe({
+      next: (response) => {
+        console.log('Producto actualizado:', response);
+        if (response.tipo === '1') {
+          this.showModalEditar = false;
+          this.productoSeleccionado = null;
+          this.cargarProductos();
+        }
+      },
+      error: (error) => {
+        console.error('Error al actualizar producto:', error);
+      },
+    });
+  }
+
+  // Abrir modal para editar producto
+  editarProducto(producto: Product) {
     this.productoSeleccionado = { ...producto };
     this.showModalEditar = true;
   }
 
-  eliminarProducto(producto: any) {
-    if (confirm(`¿Estás seguro de eliminar ${producto.nombre}?`)) {
-      this.productos = this.productos.filter((p) => p.id !== producto.id);
+  // Cambiar estado del producto (no hay DELETE, solo cambio de estado)
+  eliminarProducto(producto: Product) {
+    if (confirm(`¿Desactivar ${producto.product_name}?`)) {
+      const productoActualizado = {
+        product_id: producto.product_id,
+        product_name: producto.product_name,
+        product_price: producto.product_price,
+        product_description: producto.product_description,
+        product_urlimage: producto.product_urlimage,
+        product_state: '0', // Desactivar
+        product_stock: producto.product_stock,
+        product_needpreparation: producto.product_needpreparation,
+        category_id: producto.category_id,
+        store_id: producto.store_id,
+      };
+
+      this.productService.updateProduct(productoActualizado).subscribe({
+        next: (response) => {
+          console.log('Producto desactivado:', response);
+          if (response.tipo === '1') {
+            this.cargarProductos();
+          }
+        },
+        error: (error) => {
+          console.error('Error al desactivar producto:', error);
+        },
+      });
     }
   }
 
-  irASubcategoria(id: number, nombre: string) {
-    // this.router.navigate([
-    //   '/admin/categorias-productos/categoria',
-    //   this.categoriaIdOriginal,
-    //   this.categoriaNombreOriginal,
-    //   'subcategorias',
-    //   id,
-    //   nombre,
-    // ]);
+  // Crear subcategoría
+  crearSubcategoria(data: { nombre: string; imagen: string }) {
+    const storeId = parseInt(localStorage.getItem('store_id') || '1', 10);
+
+    const nuevaSubcategoria = {
+      category_name: data.nombre,
+      category_categoryid: this.idCategoria, // Padre es la categoría actual
+      category_urlimage: data.imagen || 'default.png',
+      category_state: '1',
+      store_id: storeId,
+    };
+
+    this.categoryService.createCategory(nuevaSubcategoria).subscribe({
+      next: (response) => {
+        console.log('Subcategoría creada:', response);
+        if (response.tipo === '1') {
+          this.showModalSubcategoria = false;
+          this.cargarSubcategorias();
+        }
+      },
+      error: (error) => {
+        console.error('Error al crear subcategoría:', error);
+      },
+    });
+  }
+
+  // Navegar a subcategoría
+  irASubcategoria(subcategoria: Category) {
+    this.router.navigate([
+      '/admin/categorias-productos/categoria',
+      this.idCategoria,
+      this.nombreCategoria,
+      'subcategoria',
+      subcategoria.category_id,
+      subcategoria.category_name,
+    ]);
   }
 }

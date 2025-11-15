@@ -10,6 +10,8 @@
       label="Crear categoria"
       (click)="showModalCategoria = true"
     ></p-button>
+
+    <!-- Modal Crear Categoría -->
     <app-modal
       [visible]="showModalCategoria"
       (visibleChange)="showModalCategoria = $event"
@@ -20,11 +22,103 @@
         (cancelar)="showModalCategoria = false"
       ></app-crear-categoria-form>
     </app-modal>
+
+    <!-- Modal Editar Categoría -->
+    <app-modal
+      [visible]="showModalEditar"
+      (visibleChange)="showModalEditar = $event"
+      header="Editar Categoría"
+    >
+      <app-crear-categoria-form
+        [categoriaEditar]="categoriaEditar"
+        (guardar)="actualizarCategoria($event)"
+        (cancelar)="showModalEditar = false; categoriaEditar = null"
+      ></app-crear-categoria-form>
+    </app-modal>
   </div>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="isLoading" class="px-10 py-4">
+    <p>Cargando categorías...</p>
+  </div>
+
+  <!-- Mensaje sin categorías -->
+  <div *ngIf="!isLoading && categorias.length === 0" class="px-10 py-4">
+    <p>No hay categorías disponibles</p>
+  </div>
+
+  <!-- Grid de categorías -->
   <div class="page-section__table-body">
     <div class="grid grid-cols-5 grid-rows-5 gap-4 py-4 px-13">
-      <div *ngFor="let cat of categorias" class="cursor-pointer">
-        <app-card [nombre]="cat.nombre"></app-card>
+      <div *ngFor="let cat of categorias" class="cursor-pointer relative group">
+        <app-card
+          [nombre]="cat.category_name"
+          [cantidad]="cat.productCount || 0"
+          [routerLink]="[
+            '/admin/categorias-productos/categoria',
+            cat.category_id,
+            cat.category_name
+          ]"
+        ></app-card>
+
+        <!-- Botones de acción (aparecen al hover) -->
+        <div
+          class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          <button
+            class="bg-blue-500 hover:bg-blue-600 text-white p-1 rounded"
+            (click)="abrirModalEditar(cat); $event.preventDefault(); $event.stopPropagation()"
+            title="Editar"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+            </svg>
+          </button>
+          <button
+            [class]="
+              esActivo(cat.category_state)
+                ? 'bg-red-500 hover:bg-red-600'
+                : 'bg-green-500 hover:bg-green-600'
+            "
+            class="text-white p-1 rounded"
+            (click)="cambiarEstadoCategoria(cat); $event.preventDefault(); $event.stopPropagation()"
+            [title]="esActivo(cat.category_state) ? 'Inactivar' : 'Activar'"
+          >
+            <svg
+              *ngIf="esActivo(cat.category_state)"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="m4.9 4.9 14.2 14.2"></path>
+            </svg>
+            <svg
+              *ngIf="!esActivo(cat.category_state)"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
