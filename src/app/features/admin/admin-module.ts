@@ -6,9 +6,10 @@ import { CategoriasProductos } from './categorias-productos/categorias-productos
 import { Clientes } from './clientes/clientes';
 import { AdminRoutingModule } from './admin-routing-module';
 import { SharedModule } from '../../shared/shared-module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [Admin, SalonesMesas, CategoriasProductos, Clientes],
-  imports: [CommonModule, AdminRoutingModule, SharedModule],
+  imports: [CommonModule, AdminRoutingModule, SharedModule, FormsModule],
 })
 export class AdminModule {}

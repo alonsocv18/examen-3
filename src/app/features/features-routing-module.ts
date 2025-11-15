@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CategoriasProductos } from './admin/categorias-productos/categorias-productos';
 import { Admin } from './admin/admin';
 import { SalonesMesas } from './admin/salones-mesas/salones-mesas';
+import { Clientes } from './admin/clientes/clientes';
 
 const routes: Routes = [
   {
@@ -12,6 +13,14 @@ const routes: Routes = [
       {
         path: 'salones-mesas',
         component: SalonesMesas,
+      },
+      {
+        path: 'categorias-productos',
+        component: CategoriasProductos,
+      },
+      {
+        path: 'clientes',
+        component: Clientes,
       },
     ],
   },

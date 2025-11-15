@@ -1,0 +1,21 @@
+<div class="card flex justify-center">
+  <p-drawer [(visible)]="visible" header="Alonso">
+    <nav>
+      <ul>
+        <li *ngFor="let item of navItems">
+          <a
+            class="sidebar-link"
+            [routerLink]="item.path"
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </p-drawer>
+  <p-button (click)="visible = true">
+    <img src="assets/images/burguer-menu.png" />
+  </p-button>
+</div>

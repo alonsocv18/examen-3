@@ -7,9 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './sidebar.scss',
 })
 export class Sidebar {
+  visible: boolean = false;
   public navItems: any[] = [
-    { label: 'Salones y Mesas', path: '/salones' },
-    { label: 'Categorías y Productos', path: '/categorias' },
-    { label: 'Clientes', path: '/clientes' },
+    { label: 'Salones y Mesas', path: '/admin/salones-mesas' },
+    { label: 'Categorías y Productos', path: '/admin/categorias-productos' },
+    { label: 'Clientes', path: '/admin/clientes' },
   ];
 }
