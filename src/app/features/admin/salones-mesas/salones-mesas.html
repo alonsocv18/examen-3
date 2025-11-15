@@ -55,10 +55,10 @@
             <span class="page-section__item-count">{{ salon.cantidad_mesas }} mesas</span>
             <span
               class="page-section__item-status"
-              [class.page-section__item-status--active]="salon.lounge_state === 'ACTIVO'"
-              [class.page-section__item-status--inactive]="salon.lounge_state !== 'ACTIVO'"
+              [class.page-section__item-status--active]="esActivo(salon.lounge_state)"
+              [class.page-section__item-status--inactive]="!esActivo(salon.lounge_state)"
             >
-              {{ salon.lounge_state === 'ACTIVO' ? 'Activo' : 'Inactivo' }}
+              {{ esActivo(salon.lounge_state) ? 'Activo' : 'Inactivo' }}
             </span>
           </div>
           <div class="page-section__item-actions">
@@ -81,7 +81,7 @@
             </button>
 
             <button
-              *ngIf="salon.lounge_state === 'ACTIVO'"
+              *ngIf="esActivo(salon.lounge_state)"
               class="page-section__item-button page-section__item-button--inactive"
               (click)="cambiarEstadoSalon(salon); $event.stopPropagation()"
             >
@@ -100,7 +100,7 @@
               Inactivar
             </button>
             <button
-              *ngIf="salon.lounge_state !== 'ACTIVO'"
+              *ngIf="!esActivo(salon.lounge_state)"
               class="page-section__item-button page-section__item-button--active"
               (click)="cambiarEstadoSalon(salon); $event.stopPropagation()"
             >

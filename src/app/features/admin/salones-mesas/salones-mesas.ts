@@ -102,7 +102,7 @@ export class SalonesMesas implements OnInit {
     const nuevoSalon = {
       lounge_name: data.nombre,
       cantidad_mesas: data.cantidadMesas,
-      lounge_state: 'ACTIVO',
+      lounge_state: '1', // 1 = activo
       store_id: storeId,
     };
 
@@ -151,7 +151,9 @@ export class SalonesMesas implements OnInit {
 
   // Activar o desactivar salón
   cambiarEstadoSalon(salon: Lounge): void {
-    const nuevoEstado = salon.lounge_state === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
+    // Determinar si está activo actualmente
+    const esActivo = this.esActivo(salon.lounge_state);
+    const nuevoEstado = esActivo ? '0' : '1';
 
     const salonActualizado = {
       lounge_id: salon.lounge_id,
@@ -170,5 +172,10 @@ export class SalonesMesas implements OnInit {
       },
       error: (err) => console.error('Error al cambiar estado:', err),
     });
+  }
+
+  // Helper para determinar si un salón está activo
+  esActivo(estado: string): boolean {
+    return estado === '1' || estado === 'ACTIVO' || estado === 'activo';
   }
 }
