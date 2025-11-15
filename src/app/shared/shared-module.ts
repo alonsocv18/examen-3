@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { SharedRoutingModule } from './shared-routing-module';
 import { Header } from './header/header';
@@ -16,10 +17,27 @@ import { Table } from './table/table';
 import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { Selector } from './selector/selector';
+import { CrearCategoriaForm } from './forms/crear-categoria-form/crear-categoria-form';
+import { CrearProductoForm } from './forms/crear-producto-form/crear-producto-form';
+import { CrearSubcategoriaForm } from './forms/crear-subcategoria-form/crear-subcategoria-form';
+import { CrearClienteForm } from './forms/crear-cliente-form/crear-cliente-form';
 @NgModule({
-  declarations: [Header, Sidebar, Modal, SearchBar, Card, Table, Selector],
+  declarations: [
+    Header,
+    Sidebar,
+    Modal,
+    SearchBar,
+    Card,
+    Table,
+    Selector,
+    CrearCategoriaForm,
+    CrearProductoForm,
+    CrearSubcategoriaForm,
+    CrearClienteForm,
+  ],
   imports: [
     CommonModule,
+    FormsModule,
     SharedRoutingModule,
     ButtonModule,
     DrawerModule,
@@ -45,6 +63,11 @@ import { Selector } from './selector/selector';
     Table,
     SelectModule,
     Selector,
+    CrearCategoriaForm,
+    CrearProductoForm,
+    CrearSubcategoriaForm,
+    CrearClienteForm,
+    FormsModule,
   ],
 })
 export class SharedModule {}

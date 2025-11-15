@@ -1,0 +1,106 @@
+<form class="p-0 m-0" (ngSubmit)="onSubmit()">
+  <div class="form-modal__group">
+    <label class="form-modal__label">Cliente</label>
+    <input
+      type="text"
+      class="form-modal__input"
+      [(ngModel)]="nombre"
+      name="nombre"
+      placeholder="Ejm: Juan Pérez"
+    />
+  </div>
+  <div class="form-modal__group">
+    <label class="form-modal__label">Tipo documento</label>
+    <input
+      type="text"
+      class="form-modal__input"
+      [(ngModel)]="tipoDocumento"
+      name="tipoDocumento"
+      placeholder="DNI, RUC, etc."
+    />
+  </div>
+  <div class="form-modal__group">
+    <label class="form-modal__label">Num. documento</label>
+    <input
+      type="text"
+      class="form-modal__input"
+      [(ngModel)]="numDocumento"
+      name="numDocumento"
+      placeholder="Ejm: 12345678"
+    />
+  </div>
+  <div class="form-modal__group">
+    <label class="form-modal__label">Teléfono</label>
+    <input
+      type="text"
+      class="form-modal__input"
+      [(ngModel)]="telefono"
+      name="telefono"
+      placeholder="Ejm: 987654321"
+    />
+  </div>
+  <div class="form-modal__group">
+    <label class="form-modal__label">Correo</label>
+    <input
+      type="email"
+      class="form-modal__input"
+      [(ngModel)]="correo"
+      name="correo"
+      placeholder="Ejm: correo@email.com"
+    />
+  </div>
+  <div class="form-modal__group">
+    <label class="form-modal__label">Estado</label>
+    <input
+      type="text"
+      class="form-modal__input"
+      [(ngModel)]="estado"
+      name="estado"
+      placeholder="Activo/Inactivo"
+    />
+  </div>
+  <div class="form-modal__footer">
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="form-modal__button form-modal__button--cancel"
+    >
+      <svg
+        class="form-modal__button-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <line x1="15" y1="9" x2="9" y2="15" />
+        <line x1="9" y1="9" x2="15" y2="15" />
+      </svg>
+      <span>Cancelar</span>
+    </button>
+    <button type="submit" class="form-modal__button form-modal__button--save">
+      <svg
+        class="form-modal__button-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+        <polyline points="17 21 17 13 7 13 7 21" />
+        <polyline points="7 3 7 8 15 8" />
+      </svg>
+      <span>Crear cliente</span>
+    </button>
+  </div>
+</form>
