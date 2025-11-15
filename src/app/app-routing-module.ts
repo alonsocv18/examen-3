@@ -11,9 +11,10 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./core/core-module').then((m) => m.CoreModule),
   },
+  { path: 'register', loadChildren: () => import('./core/core-module').then((m) => m.CoreModule) },
   {
-    path: 'register',
-    loadChildren: () => import('./core/core-module').then((m) => m.CoreModule),
+    path: 'admin',
+    loadChildren: () => import('./features/features-module').then((m) => m.FeaturesModule),
   },
 ];
 

@@ -4,11 +4,10 @@ import { CoreRoutingModule } from './core-routing-module';
 import { Login } from './login/login';
 import { Register } from './register/register';
 import { SharedModule } from '../shared/shared-module';
-import { Prueba } from './prueba/prueba';
 
 @NgModule({
-  declarations: [Register, Login, Prueba],
+  declarations: [Register, Login],
   imports: [CommonModule, CoreRoutingModule, SharedModule],
-  exports: [Login, Register, Prueba],
+  exports: [Login, Register],
 })
 export class CoreModule {}

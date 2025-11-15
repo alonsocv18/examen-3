@@ -9,8 +9,4 @@ import { Router } from '@angular/router';
 })
 export class Register {
   constructor(private router: Router) {}
-
-  irAlogin() {
-    this.router.navigate(['/login']);
-  }
 }

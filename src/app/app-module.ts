@@ -7,10 +7,11 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import { provideHttpClient } from '@angular/common/http';
 import Aura from '@primeuix/themes/aura';
+import { FeaturesModule } from './features/features-module';
 
 @NgModule({
   declarations: [App],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, FeaturesModule],
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideAnimationsAsync(),
