@@ -3,7 +3,7 @@
     <div class="page-section__header-icon">
       <!--AQUI VA UN ICONO GAA-->
     </div>
-    <h1 class="page-section__header-title">Clientes</h1>
+    <h1 class="page-section__header-title">Categorias y productos</h1>
   </div>
   <p-divider type="solid" />
   <div class="page-section__header">
@@ -15,11 +15,9 @@
   </div>
   <div class="page-section__table-body">
     <div class="grid grid-cols-5 grid-rows-5 gap-4 py-4 px-20">
-      <app-card
-        *ngFor="let cat of categorias"
-        [nombre]="cat.nombre"
-        [cantidad]="cat.cantidad"
-      ></app-card>
+      <div *ngFor="let cat of categorias" class="cursor-pointer">
+        <app-card [id]="cat.id" [nombre]="cat.nombre" [cantidad]="cat.cantidad"></app-card>
+      </div>
     </div>
   </div>
 </div>

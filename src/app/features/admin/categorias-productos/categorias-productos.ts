@@ -8,12 +8,13 @@ import { Component } from '@angular/core';
 })
 export class CategoriasProductos {
   categorias = [
-    { nombre: 'Bebidas', cantidad: 24 },
-    { nombre: 'Pollo a la brasa', cantidad: 21 },
-    { nombre: 'Combos Familiares', cantidad: 11 },
-    { nombre: 'Pollo Broaster', cantidad: 15 },
-    { nombre: 'Piezas de Pollo a la Brasa', cantidad: 5 },
-    { nombre: 'tryrty', cantidad: 0 },
-    { nombre: 'Prueba Academia EDIT', cantidad: 0 },
+    { id: 1, nombre: 'Bebidas', cantidad: 24 },
+    { id: 2, nombre: 'Pollo a la brasa', cantidad: 21 },
+    { id: 3, nombre: 'Combos Familiares', cantidad: 11 },
+    { id: 4, nombre: 'Pollo Broaster', cantidad: 15 },
+    { id: 5, nombre: 'Piezas de Pollo a la Brasa', cantidad: 5 },
+    { id: 6, nombre: 'tryrty', cantidad: 0 },
+    { id: 7, nombre: 'Prueba Academia EDIT', cantidad: 0 },
+    { id: 8, nombre: 'Eldersito', cantidad: 0 },
   ];
 }

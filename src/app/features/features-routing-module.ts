@@ -16,7 +16,10 @@ const routes: Routes = [
       },
       {
         path: 'categorias-productos',
-        component: CategoriasProductos,
+        loadChildren: () =>
+          import('./admin/categorias-productos/categorias-productos-routing-module').then(
+            (m) => m.CategoriasProductosRoutingModule
+          ),
       },
       {
         path: 'clientes',

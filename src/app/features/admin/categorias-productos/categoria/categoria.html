@@ -1,0 +1,37 @@
+<div class="page-section">
+  <div class="page-section__header">
+    <div class="page-section__header-icon">
+      <!--AQUI VA UN ICONO GAA-->
+    </div>
+    <h1 class="page-section__header-title">Categoría: {{ nombreCategoria }}</h1>
+  </div>
+  <p-divider type="solid" />
+  <p>Subcategorias:</p>
+  <div class="grid grid-cols-5 gap-4 py-4 px-10">
+    <app-card
+      *ngFor="let sub of subcategorias"
+      [id]="sub.id"
+      [nombre]="sub.nombre"
+      [cantidad]="0"
+      (click)="irASubcategoria(sub.id, sub.nombre)"
+    ></app-card>
+  </div>
+  <div class="flex flex-row px-10 gap-2">
+    <input type="text" placeholder="Buscar categoria" pInputText fluid />
+    <p-button styleClass="h-auto w-40" label="Crear categoria"></p-button>
+  </div>
+
+  <!--- CRUD PRODUCTOS --->
+  <div class="px-10">
+    <app-table
+      [columns]="[
+        { field: 'nombre', header: 'Producto' },
+        { field: 'stock', header: 'Stock' },
+        { field: 'precio', header: 'Precio' },
+        { field: 'acciones', header: 'Acciones' }
+      ]"
+      [data]="productosFiltrados"
+    >
+    </app-table>
+  </div>
+</div>
