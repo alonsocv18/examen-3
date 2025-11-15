@@ -1,0 +1,164 @@
+@reference "tailwindcss";
+.salones-mesas {
+  @apply flex flex-col h-full w-full bg-white;
+}
+
+/* Header */
+.salones-mesas__header {
+  @apply flex items-center gap-3 px-5 pt-4 bg-white;
+}
+
+.salones-mesas__header-icon {
+  @apply w-6 h-6 text-gray-700;
+}
+
+.salones-mesas__header-title {
+  @apply text-xl font-semibold text-gray-800 m-0;
+}
+
+/* Content */
+.salones-mesas__content {
+  @apply flex flex-1 overflow-hidden gap-2;
+}
+
+/* Sidebar */
+.salones-mesas__sidebar {
+  @apply flex flex-col w-80;
+}
+
+.salones-mesas__sidebar-header {
+  @apply px-4 py-3 bg-white border-gray-300;
+}
+
+.salones-mesas__sidebar-title {
+  @apply text-base font-semibold text-gray-700 m-0;
+}
+
+/* Search */
+.salones-mesas__search {
+  @apply flex items-center gap-2 px-4 pb-3 bg-white;
+}
+
+.salones-mesas__search-input {
+  @apply flex-1 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.salones-mesas__search-button {
+  @apply flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors cursor-pointer;
+}
+
+/* List */
+.salones-mesas__list {
+  @apply flex-1 overflow-y-auto px-4 py-2;
+}
+
+/* Item */
+.salones-mesas__item {
+  @apply mb-3 p-4 bg-white border border-gray-300 rounded-lg shadow-sm cursor-pointer;
+}
+
+.salones-mesas__item--selected {
+  @apply border-blue-500 border-2;
+}
+
+.salones-mesas__item-header {
+  @apply mb-2;
+}
+
+.salones-mesas__item-name {
+  @apply text-base font-semibold text-gray-800 m-0;
+}
+
+.salones-mesas__item-info {
+  @apply flex items-center gap-2 mb-3 text-sm;
+}
+
+.salones-mesas__item-icon {
+  @apply w-4 h-4 text-gray-600;
+}
+
+.salones-mesas__item-count {
+  @apply text-gray-600;
+}
+
+.salones-mesas__item-status {
+  @apply ml-auto px-2 py-1 text-xs font-medium rounded;
+}
+
+.salones-mesas__item-status--active {
+  @apply text-green-700 bg-green-100;
+}
+
+.salones-mesas__item-status--inactive {
+  @apply text-red-700 bg-red-100;
+}
+
+.salones-mesas__item-actions {
+  @apply flex gap-2;
+}
+
+.salones-mesas__item-button {
+  @apply flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded transition-colors cursor-pointer;
+}
+
+.salones-mesas__item-button--edit {
+  @apply text-blue-600 bg-white border border-blue-600 hover:bg-blue-50;
+}
+
+.salones-mesas__item-button--inactive {
+  @apply text-red-600 bg-white border border-red-600 hover:bg-red-50;
+}
+
+.salones-mesas__item-button--active {
+  @apply text-green-600 bg-white border border-green-600 hover:bg-green-50;
+}
+
+/* Main Panel */
+.salones-mesas__main {
+  @apply flex flex-col flex-1 bg-white;
+}
+
+.salones-mesas__main-header {
+  @apply flex items-center gap-3 px-5 pt-4 bg-gray-50;
+}
+
+.salones-mesas__main-icon {
+  @apply w-5 h-5 text-gray-700;
+}
+
+.salones-mesas__main-title {
+  @apply text-lg font-semibold text-gray-800 m-0;
+}
+
+/* Table */
+.salones-mesas__table-header {
+  @apply flex items-center px-5 py-3 bg-gray-100 text-sm font-semibold text-gray-700;
+}
+
+.salones-mesas__table-col {
+  @apply flex-1;
+}
+
+.salones-mesas__table-col--acciones {
+  @apply text-right;
+}
+
+.salones-mesas__table-body {
+  @apply flex-1 overflow-y-auto;
+}
+
+.salones-mesas__table-row {
+  @apply flex items-center px-5 py-2 hover:bg-gray-50 transition-colors;
+}
+
+.salones-mesas__table-cell {
+  @apply flex-1 text-sm text-gray-800;
+}
+
+.salones-mesas__table-cell--actions {
+  @apply flex justify-end;
+}
+
+.salones-mesas__table-button {
+  @apply flex items-center justify-center w-8 h-8 text-blue-600 hover:bg-blue-50 rounded transition-colors cursor-pointer;
+}

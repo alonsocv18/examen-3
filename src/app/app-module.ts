@@ -8,7 +8,6 @@ import { providePrimeNG } from 'primeng/config';
 import { provideHttpClient } from '@angular/common/http';
 import Aura from '@primeuix/themes/aura';
 import { FeaturesModule } from './features/features-module';
-
 @NgModule({
   declarations: [App],
   imports: [BrowserModule, AppRoutingModule, FeaturesModule],
