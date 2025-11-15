@@ -1,6 +1,12 @@
 <div class="auth-container">
-  <form id="login-form" action="" method="POST" class="auth-form">
+  <form id="login-form" (ngSubmit)="onSubmit()" class="auth-form">
     <label class="auth-form__title">Inicia Sesion</label>
+
+    <!-- Mensaje de error -->
+    <div *ngIf="errorMessage" class="auth-form__error">
+      {{ errorMessage }}
+    </div>
+
     <div class="auth-form__field">
       <label for="email" class="auth-form__label">Correo</label>
       <input
@@ -8,6 +14,7 @@
         id="email"
         name="email"
         class="auth-form__input"
+        [(ngModel)]="email"
         required
         autocomplete="email"
         placeholder="Ingresa tu correo electrónico"
@@ -21,13 +28,19 @@
         id="password"
         name="password"
         class="auth-form__input"
+        [(ngModel)]="password"
         required
         autocomplete="current-password"
         placeholder="Ingresa tu contraseña"
       />
     </div>
     <div class="auth-form__end-section">
-      <p-button styleClass="w-[390px] h-12" label="Inicia Sesión"></p-button>
+      <p-button
+        type="submit"
+        styleClass="w-[390px] h-12"
+        [label]="isLoading ? 'Cargando...' : 'Inicia Sesión'"
+        [disabled]="isLoading"
+      ></p-button>
       <div for="email" class="auth-form__label" (click)="irAregister()">
         ¿No tienes cuenta? <span class="cursor-pointer">Regístrate</span>
       </div>

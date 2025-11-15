@@ -8,11 +8,27 @@ import { TableModel } from '../interfaces/table.interface';
   providedIn: 'root',
 })
 export class TableService {
-  private url = environment.apiUrl + 'tables';
+  private url = environment.apiUrl + '/api/rest/tablee';
 
   constructor(private http: HttpClient) {}
 
-  getTablesByLounge(storeId: number, loungeId: number): Observable<TableModel[]> {
-    return this.http.get<TableModel[]>(`${this.url}/${storeId}/${loungeId}`);
+  // Obtener mesas por salón
+  getTableeByLoungeId(loungeId: number, esGestion: number = 1): Observable<any> {
+    return this.http.get<any>(`${this.url}/getTableeByLoungeId/${loungeId}/${esGestion}`);
+  }
+
+  // Obtener mesa por ID
+  getTableById(tableId: number): Observable<any> {
+    return this.http.get<any>(`${this.url}/tablee/${tableId}`);
+  }
+
+  // Obtener todas las mesas
+  getAllTables(): Observable<any> {
+    return this.http.get<any>(`${this.url}/getTables`);
+  }
+
+  // Actualizar/Editar mesa
+  updateTable(data: any): Observable<any> {
+    return this.http.put(`${this.url}/tablee`, data);
   }
 }

@@ -1,15 +1,24 @@
 <div class="page-section__header">
   <h1 class="page-section__header-title">Clientes</h1>
 </div>
+
 <p-divider type="solid" />
+
+<!-- Filtros y acciones -->
 <div class="page-section__header">
   <input type="text" placeholder="Buscar categoria" pInputText fluid />
+
+  <!-- Filtro adicional -->
   <app-selector></app-selector>
+
+  <!-- Abrir modal de creación -->
   <p-button
     styleClass="h-auto w-40"
     label="Crear cliente"
     (click)="showModalCliente = true"
   ></p-button>
+
+  <!-- Modal: Crear cliente -->
   <app-modal
     [visible]="showModalCliente"
     (visibleChange)="showModalCliente = $event"
@@ -21,6 +30,7 @@
     ></app-crear-cliente-form>
   </app-modal>
 
+  <!-- Modal: Editar cliente -->
   <app-modal
     [visible]="showModalEditar"
     (visibleChange)="showModalEditar = $event"
@@ -33,7 +43,8 @@
     ></app-crear-cliente-form>
   </app-modal>
 </div>
-<!--- CRUD usuarios  --->
+
+<!-- Tabla CRUD -->
 <div class="px-10">
   <app-table
     [columns]="[

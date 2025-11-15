@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Importa CommonModule
 import { LoungeService } from '../../../core/services/lounge.service';
+import { TableService } from '../../../core/services/table.service';
 import { Lounge } from '../../../core/interfaces/lounge.interface';
 import { TableModel } from '../../../core/interfaces/table.interface';
-import { TableService } from '../../../core/services/table.service';
 
 @Component({
   selector: 'app-salones-mesas',
@@ -12,18 +11,21 @@ import { TableService } from '../../../core/services/table.service';
   styleUrl: './salones-mesas.scss',
 })
 export class SalonesMesas implements OnInit {
+  // Datos principales
   salones: Lounge[] = [];
   mesas: TableModel[] = [];
+
+  // Selecciones activas
   salonSeleccionado: Lounge | null = null;
   mesaSeleccionada: TableModel | null = null;
 
-  // Flags de carga
-  loadingSalones: boolean = false;
-  loadingMesas: boolean = false;
+  // Estados de carga
+  loadingSalones = false;
+  loadingMesas = false;
 
   // Modales
-  showModal: boolean = false;
-  showModalEditar: boolean = false;
+  showModal = false;
+  showModalEditar = false;
   salonParaEditar: Lounge | null = null;
 
   constructor(private loungeService: LoungeService, private tableService: TableService) {}
@@ -32,104 +34,141 @@ export class SalonesMesas implements OnInit {
     this.cargarSalones();
   }
 
+  // Obtener lista de salones
   cargarSalones(): void {
     this.loadingSalones = true;
-    this.loungeService.getLounges().subscribe({
-      next: (data) => {
-        this.salones = data;
+    const storeId = parseInt(localStorage.getItem('store_id') || '1', 10);
+
+    this.loungeService.getLounges(undefined, storeId).subscribe({
+      next: (response) => {
+        console.log('Respuesta de salones:', response);
+        if (response.tipo === '1' && response.data) {
+          this.salones = response.data;
+        } else {
+          this.salones = [];
+        }
         this.loadingSalones = false;
       },
-      error: () => {
+      error: (err) => {
+        console.error('Error al cargar salones:', err);
         this.loadingSalones = false;
       },
     });
   }
 
+  // Seleccionar salón y cargar mesas asociadas
   seleccionarSalon(salon: Lounge): void {
     this.salonSeleccionado = salon;
     this.mesaSeleccionada = null;
-    this.cargarMesas(salon.store_id, salon.lounge_id);
+    console.log('Cargando mesas para salón:', salon.lounge_id);
+    this.cargarMesas(salon.lounge_id);
   }
 
-  cargarMesas(storeId: number, loungeId: number): void {
+  // Obtener mesas del salón seleccionado
+  cargarMesas(loungeId: number): void {
     this.loadingMesas = true;
-    this.tableService.getTablesByLounge(storeId, loungeId).subscribe({
-      next: (data) => {
-        this.mesas = data;
+    this.tableService.getTableeByLoungeId(loungeId, 1).subscribe({
+      next: (response) => {
+        console.log('Respuesta de mesas:', response);
+        if (response.tipo === '1' && response.data) {
+          this.mesas = response.data;
+        } else {
+          this.mesas = [];
+        }
         this.loadingMesas = false;
       },
-      error: () => {
+      error: (err) => {
+        console.error('Error al cargar mesas:', err);
+        this.mesas = [];
         this.loadingMesas = false;
       },
     });
   }
 
+  // Seleccionar mesa
   seleccionarMesa(mesa: TableModel): void {
     this.mesaSeleccionada = mesa;
   }
 
+  // Ver detalles de mesa
   verMesa(mesa: TableModel): void {
     console.log('Detalles mesa:', mesa);
   }
 
+  // Crear un nuevo salón
   crearSalon(data: { nombre: string; cantidadMesas: number }): void {
-    const nuevoSalon: Lounge = {
-      lounge_id: 0,
-      store_id: 1,
+    const storeId = parseInt(localStorage.getItem('store_id') || '1', 10);
+
+    const nuevoSalon = {
       lounge_name: data.nombre,
-      lounge_state: 'activo',
       cantidad_mesas: data.cantidadMesas,
+      lounge_state: 'ACTIVO',
+      store_id: storeId,
     };
 
     this.loungeService.createLounge(nuevoSalon).subscribe({
-      next: () => {
-        this.showModal = false;
-        this.cargarSalones();
+      next: (response) => {
+        console.log('Salón creado:', response);
+        if (response.tipo === '1') {
+          this.showModal = false;
+          this.cargarSalones();
+        }
       },
-      error: (err) => {
-        console.error('Error al crear salón:', err);
-      },
+      error: (err) => console.error('Error al crear salón:', err),
     });
   }
 
+  // Abrir modal para edición
   abrirModalEditar(salon: Lounge): void {
     this.salonParaEditar = { ...salon };
     this.showModalEditar = true;
   }
 
-  actualizarSalon(data: { id?: number; nombre: string; cantidadMesas: number }): void {
+  // Guardar cambios del salón editado
+  actualizarSalon(data: { nombre: string; cantidadMesas: number }): void {
     if (!this.salonParaEditar) return;
 
-    const salonActualizado: Lounge = {
-      ...this.salonParaEditar,
+    const salonActualizado = {
+      lounge_id: this.salonParaEditar.lounge_id,
       lounge_name: data.nombre,
+      cantidad_mesas: this.salonParaEditar.cantidad_mesas,
+      lounge_state: this.salonParaEditar.lounge_state,
+      store_id: this.salonParaEditar.store_id,
     };
 
-    this.loungeService.updateLounge(this.salonParaEditar.lounge_id, salonActualizado).subscribe({
-      next: () => {
-        this.showModalEditar = false;
-        this.salonParaEditar = null;
-        this.cargarSalones();
+    this.loungeService.updateLounge(salonActualizado).subscribe({
+      next: (response) => {
+        console.log('Salón actualizado:', response);
+        if (response.tipo === '1') {
+          this.showModalEditar = false;
+          this.salonParaEditar = null;
+          this.cargarSalones();
+        }
       },
-      error: (err) => {
-        console.error('Error al actualizar salón:', err);
-      },
+      error: (err) => console.error('Error al actualizar salón:', err),
     });
   }
 
+  // Activar o desactivar salón
   cambiarEstadoSalon(salon: Lounge): void {
-    const salonActualizado: Lounge = {
-      ...salon,
-      lounge_state: salon.lounge_state === 'activo' ? 'inactivo' : 'activo',
+    const nuevoEstado = salon.lounge_state === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
+
+    const salonActualizado = {
+      lounge_id: salon.lounge_id,
+      lounge_name: salon.lounge_name,
+      cantidad_mesas: salon.cantidad_mesas,
+      lounge_state: nuevoEstado,
+      store_id: salon.store_id,
     };
 
-    this.loungeService.updateLounge(salon.lounge_id, salonActualizado).subscribe({
-      next: () => {
-        this.cargarSalones();
+    this.loungeService.updateLounge(salonActualizado).subscribe({
+      next: (response) => {
+        console.log('Estado cambiado:', response);
+        if (response.tipo === '1') {
+          this.cargarSalones();
+        }
       },
-      error: (err) => {
-        console.error('Error al cambiar estado:', err);
-      },
+      error: (err) => console.error('Error al cambiar estado:', err),
     });
   }
 }
