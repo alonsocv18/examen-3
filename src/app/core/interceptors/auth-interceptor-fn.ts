@@ -3,23 +3,21 @@ import { HttpInterceptorFn } from '@angular/common/http';
 export const authInterceptorFn: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('token');
 
-  console.log('Interceptor Funcional - Token:', token);
-  console.log('Interceptor Funcional - URL:', req.url);
+  // No agregar token a las peticiones de login
+  if (req.url.includes('/login')) {
+    return next(req);
+  }
 
   if (token) {
+    // Agregar token como parámetro en la URL
     const clonedRequest = req.clone({
-      setHeaders: {
-        Authorization: token,
-        'Content-Type': 'application/json',
+      setParams: {
+        token: token,
       },
     });
-    console.log(
-      'Interceptor Funcional - Headers agregados:',
-      clonedRequest.headers.get('Authorization')
-    );
+    console.log('Token agregado a URL:', clonedRequest.urlWithParams);
     return next(clonedRequest);
   }
 
-  console.log('Interceptor Funcional - No hay token');
   return next(req);
 };

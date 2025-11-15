@@ -11,16 +11,13 @@ export class LoungeService {
 
   constructor(private http: HttpClient) {}
 
-  // Obtener todos los salones (GET con filtros opcionales)
   getLounges(lounge_name?: string, store_id?: number): Observable<any> {
-    let params = new HttpParams();
-    if (lounge_name) params = params.set('lounge_name', lounge_name);
-    if (store_id) params = params.set('store_id', store_id.toString());
+    const body: any = {};
+    if (lounge_name) body.lounge_name = lounge_name;
+    if (store_id) body.store_id = store_id;
 
-    return this.http.get<any>(`${this.url}/getLounges`, { params });
-  }
-
-  // Crear nuevo salón (POST)
+    return this.http.post<any>(`${this.url}/getLounges`, body);
+  } // Crear nuevo salón (POST)
   createLounge(data: any): Observable<any> {
     return this.http.post(`${this.url}/lounge`, data);
   }
