@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class Card {
   @Input() nombre: string = '';
   @Input() cantidad: number = 0;
-  @Input() id: number = 0;
+  @Input() id: string | number = 0;
   @Input() disableNavigation: boolean = false;
 
   constructor(private router: Router) {}

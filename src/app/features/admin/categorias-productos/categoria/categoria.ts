@@ -47,12 +47,18 @@ export class Categoria implements OnInit {
   // Cargar subcategorías de esta categoría
   cargarSubcategorias() {
     this.isLoadingSubcategorias = true;
-    // Filtrar por category_categoryid = idCategoria (subcategorías de esta categoría)
-    this.categoryService.getCategories(undefined, this.idCategoria, 1, undefined).subscribe({
+    // Traer todas las categorías y filtrar manualmente las que tienen como padre esta categoría
+    this.categoryService.getCategories(undefined, undefined, 1, undefined).subscribe({
       next: (response) => {
         console.log('Respuesta subcategorías:', response);
         if (response.tipo === '1' && response.data) {
-          this.subcategorias = response.data;
+          // Filtrar subcategorías donde category_categoryid coincide con idCategoria
+          this.subcategorias = response.data.filter((cat: Category) => {
+            const parentId = cat.category_categoryid?.toString();
+            const currentId = this.idCategoria.toString();
+            return parentId === currentId;
+          });
+          console.log('Subcategorías filtradas:', this.subcategorias);
         } else {
           this.subcategorias = [];
         }
@@ -69,7 +75,7 @@ export class Categoria implements OnInit {
   // Cargar productos de esta categoría
   cargarProductos() {
     this.isLoadingProductos = true;
-    this.productService.getProducts(undefined, this.idCategoria).subscribe({
+    this.productService.getProducts(undefined, this.idCategoria, 1).subscribe({
       next: (response) => {
         console.log('Respuesta productos:', response);
         if (response.tipo === '1' && response.data) {

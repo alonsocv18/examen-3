@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../../../core/services/category.service';
 import { ProductService } from '../../../core/services/product.service';
 import { Category } from '../../../core/interfaces/category.interface';
-import { forkJoin } from 'rxjs';
 
 interface CategoryWithCount extends Category {
   productCount?: number;
@@ -30,52 +29,28 @@ export class CategoriasProductos implements OnInit {
   // GET - Cargar todas las categorías padre (category_categoryid = 0)
   cargarCategorias() {
     this.isLoading = true;
-    // isPadre=1 filtra solo categorías padre
-    this.categoryService.getCategories(undefined, undefined, 1, 1).subscribe({
+    // Traer todas las categorías con isGestion=1
+    this.categoryService.getCategories(undefined, undefined, 1, undefined).subscribe({
       next: (response) => {
         console.log('Respuesta de categorías:', response);
         if (response.tipo === '1' && response.data) {
-          const categorias = response.data;
-          // Cargar productos de cada categoría para obtener el count
-          this.cargarConteoProductos(categorias);
+          // Filtrar solo categorías padre (category_categoryid === "0" o === 0)
+          this.categorias = response.data
+            .filter(
+              (cat: Category) => cat.category_categoryid === '0' || cat.category_categoryid === 0
+            )
+            .map((cat: Category) => ({
+              ...cat,
+              productCount: parseInt(cat.cantidad_productos?.toString() || '0', 10),
+            }));
+          console.log('Categorías padre filtradas:', this.categorias);
         } else {
           this.categorias = [];
-          this.isLoading = false;
         }
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error al cargar categorías:', error);
-        this.isLoading = false;
-      },
-    });
-  }
-
-  // Cargar conteo de productos para cada categoría
-  cargarConteoProductos(categorias: Category[]) {
-    if (categorias.length === 0) {
-      this.categorias = [];
-      this.isLoading = false;
-      return;
-    }
-
-    // Hacer solicitudes paralelas para obtener productos de cada categoría
-    const requests = categorias.map((cat) =>
-      this.productService.getProducts(undefined, cat.category_id)
-    );
-
-    forkJoin(requests).subscribe({
-      next: (responses) => {
-        this.categorias = categorias.map((cat, index) => {
-          const response = responses[index];
-          const productCount = response.tipo === '1' && response.data ? response.data.length : 0;
-          return { ...cat, productCount };
-        });
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error al cargar conteo de productos:', error);
-        // Aún así mostrar las categorías sin el conteo
-        this.categorias = categorias.map((cat) => ({ ...cat, productCount: 0 }));
         this.isLoading = false;
       },
     });

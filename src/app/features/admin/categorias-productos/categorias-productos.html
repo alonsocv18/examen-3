@@ -52,13 +52,9 @@
     <div class="grid grid-cols-5 grid-rows-5 gap-4 py-4 px-13">
       <div *ngFor="let cat of categorias" class="cursor-pointer relative group">
         <app-card
+          [id]="cat.category_id"
           [nombre]="cat.category_name"
           [cantidad]="cat.productCount || 0"
-          [routerLink]="[
-            '/admin/categorias-productos/categoria',
-            cat.category_id,
-            cat.category_name
-          ]"
         ></app-card>
 
         <!-- Botones de acción (aparecen al hover) -->

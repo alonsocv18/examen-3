@@ -13,7 +13,7 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   // POST - Listado de productos (con filtros opcionales)
-  getProducts(productName?: string, categoryId?: number): Observable<any> {
+  getProducts(productName?: string, categoryId?: number, isGestion?: number): Observable<any> {
     const body: any = {};
 
     if (productName) {
@@ -22,6 +22,11 @@ export class ProductService {
     if (categoryId !== undefined) {
       body.category_id = categoryId;
     }
+    if (isGestion !== undefined) {
+      body.isGestion = isGestion;
+    }
+
+    console.log('getProducts body:', body); // Debug
 
     return this.http.post(`${this.apiUrl}/api/rest/product/getProducts`, body);
   }

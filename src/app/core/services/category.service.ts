@@ -12,7 +12,7 @@ export class CategoryService {
 
   constructor(private http: HttpClient) {}
 
-  // POST - Listado de categorías (con filtros opcionales)
+  // POST - Lista de categorias pero con filtros porque me muestra incluso la subcategoria
   getCategories(
     categoryName?: string,
     categoryCategoryId?: number,
