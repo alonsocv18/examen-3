@@ -23,12 +23,12 @@
         <input pInputText type="text" pSize="large" placeholder="Buscar" />
         <p-button styleClass="h-12 w-12" label="+" (click)="showDialog()"></p-button>
         <app-modal [visible]="showModal" (visibleChange)="closeDialog()" header="Crear Salón">
-          <form (ngSubmit)="crearSalon()">
+          <form class="p-0 m-0" (ngSubmit)="crearSalon()">
             <div class="form-modal__group">
-              <label class="form-modal__label">
+              <span class="form-modal__label">
                 <i class="pi pi-table form-modal__label-icon"></i>
                 Cantidad de mesas
-              </label>
+              </span>
               <div class="form-modal__stepper">
                 <button
                   type="button"
@@ -154,11 +154,59 @@
               [header]="'Editar Salón'"
             >
               <form (ngSubmit)="guardarCambios(i)">
-                <label>Nombre del salón</label>
-                <input type="text" [(ngModel)]="salones[i].nombre" name="nombreSalon{{ i }}" />
+                <div class="form-modal__group">
+                  <label class="form-modal__label">Nombre del salón</label>
+                  <input
+                    type="text"
+                    class="form-modal__input"
+                    [(ngModel)]="salones[i].nombre"
+                    name="nombreSalon{{ i }}"
+                    placeholder="Ejm: Terraza"
+                  />
+                </div>
                 <div class="form-modal__footer">
-                  <button type="button" (click)="closeModal()">Cancelar</button>
-                  <button type="submit">Guardar cambios</button>
+                  <button
+                    type="button"
+                    (click)="closeModal()"
+                    class="form-modal__button form-modal__button--cancel"
+                  >
+                    <svg
+                      class="form-modal__button-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="15" y1="9" x2="9" y2="15" />
+                      <line x1="9" y1="9" x2="15" y2="15" />
+                    </svg>
+                    <span>Cancelar</span>
+                  </button>
+                  <button type="submit" class="form-modal__button form-modal__button--save">
+                    <svg
+                      class="form-modal__button-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                      <polyline points="17 21 17 13 7 13 7 21" />
+                      <polyline points="7 3 7 8 15 8" />
+                    </svg>
+                    <span>Guardar cambios</span>
+                  </button>
                 </div>
               </form>
             </app-modal>

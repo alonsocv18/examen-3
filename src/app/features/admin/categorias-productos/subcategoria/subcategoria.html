@@ -1,1 +1,32 @@
-<p>subcategoria works!</p>
+<div class="page-section">
+  <div class="page-section__header">
+    <p-button
+      label="Volver"
+      [routerLink]="['/admin/categorias-productos/categoria', idCategoria, nombreCategoria]"
+    ></p-button>
+    <span class="page-section__header-title">
+      Subcategoría: <span class="text-primary">{{ nombreSubcategoria }}</span>
+    </span>
+  </div>
+
+  <p-divider type="solid" />
+
+  <div class="flex flex-row gap-2 px-10">
+    <input type="text" placeholder="Buscar productos de la categoria" pInputText fluid />
+    <p-button styleClass="h-auto w-40" label="Crear producto"></p-button>
+  </div>
+
+  <div class="px-10">
+    <!--- CRUD PRODUCTOS --->
+    <app-table
+      [columns]="[
+        { field: 'nombre', header: 'Producto' },
+        { field: 'stock', header: 'Stock' },
+        { field: 'precio', header: 'Precio' },
+        { field: 'acciones', header: 'Acciones' }
+      ]"
+      [data]="productos"
+    >
+    </app-table>
+  </div>
+</div>

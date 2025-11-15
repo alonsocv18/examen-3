@@ -1,37 +1,36 @@
-<div class="page-section">
-  <div class="page-section__header">
-    <div class="page-section__header-icon">
-      <!--AQUI VA UN ICONO GAA-->
-    </div>
-    <h1 class="page-section__header-title">Categoría: {{ nombreCategoria }}</h1>
-  </div>
-  <p-divider type="solid" />
-  <p>Subcategorias:</p>
-  <div class="grid grid-cols-5 gap-4 py-4 px-10">
-    <app-card
-      *ngFor="let sub of subcategorias"
-      [id]="sub.id"
-      [nombre]="sub.nombre"
-      [cantidad]="0"
-      (click)="irASubcategoria(sub.id, sub.nombre)"
-    ></app-card>
-  </div>
-  <div class="flex flex-row px-10 gap-2">
-    <input type="text" placeholder="Buscar categoria" pInputText fluid />
-    <p-button styleClass="h-auto w-40" label="Crear categoria"></p-button>
-  </div>
+<div class="page-section__header">
+  <p-button label="Volver" [routerLink]="['/admin/categorias-productos']"></p-button>
+  <span class="page-section__header-title"
+    >Categoría: <span class="text-primary">{{ nombreCategoria }} </span></span
+  >
+</div>
+<p-divider type="solid" />
+<span class="pl-10 page-section__header-subtitle">Subcategorias:</span>
+<div class="grid grid-cols-5 gap-4 py-4 px-10">
+  <app-card
+    *ngFor="let sub of subcategorias"
+    [id]="sub.id"
+    [nombre]="sub.nombre"
+    [cantidad]="0"
+    [disableNavigation]="true"
+    (click)="irASubcategoria(sub.id, sub.nombre)"
+  ></app-card>
+</div>
+<div class="flex flex-row px-10 gap-2">
+  <input type="text" placeholder="Buscar productos de la categoria" pInputText fluid />
+  <p-button styleClass="h-auto w-40" label="Crear producto"></p-button>
+</div>
 
-  <!--- CRUD PRODUCTOS --->
-  <div class="px-10">
-    <app-table
-      [columns]="[
-        { field: 'nombre', header: 'Producto' },
-        { field: 'stock', header: 'Stock' },
-        { field: 'precio', header: 'Precio' },
-        { field: 'acciones', header: 'Acciones' }
-      ]"
-      [data]="productosFiltrados"
-    >
-    </app-table>
-  </div>
+<!--- CRUD PRODUCTOS --->
+<div class="px-10">
+  <app-table
+    [columns]="[
+      { field: 'nombre', header: 'Producto' },
+      { field: 'stock', header: 'Stock' },
+      { field: 'precio', header: 'Precio' },
+      { field: 'acciones', header: 'Acciones' }
+    ]"
+    [data]="productosFiltrados"
+  >
+  </app-table>
 </div>

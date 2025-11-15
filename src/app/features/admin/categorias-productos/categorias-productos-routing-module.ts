@@ -12,12 +12,10 @@ const routes: Routes = [
   {
     path: 'categoria/:id/:nombre',
     component: Categoria,
-    children: [
-      {
-        path: 'subcategorias/:id_subcategoria/:nombre_subcategoria',
-        component: Subcategoria,
-      },
-    ],
+  },
+  {
+    path: 'categoria/:id/:nombre/subcategorias/:id_subcategoria/:nombre_subcategoria',
+    component: Subcategoria,
   },
 ];
 

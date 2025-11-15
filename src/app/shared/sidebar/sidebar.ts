@@ -9,8 +9,8 @@ import { Component } from '@angular/core';
 export class Sidebar {
   visible: boolean = false;
   public navItems: any[] = [
-    { label: 'Salones y Mesas', path: '/admin/salones-mesas' },
-    { label: 'Categorías y Productos', path: '/admin/categorias-productos' },
-    { label: 'Clientes', path: '/admin/clientes' },
+    { span: 'Salones y Mesas', path: '/admin/salones-mesas' },
+    { span: 'Categorías y Productos', path: '/admin/categorias-productos' },
+    { span: 'Clientes', path: '/admin/clientes' },
   ];
 }

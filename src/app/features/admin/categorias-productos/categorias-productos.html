@@ -14,7 +14,7 @@
     <p-button styleClass="h-auto w-40" label="Crear categoria"></p-button>
   </div>
   <div class="page-section__table-body">
-    <div class="grid grid-cols-5 grid-rows-5 gap-4 py-4 px-20">
+    <div class="grid grid-cols-5 grid-rows-5 gap-4 py-4 px-13">
       <div *ngFor="let cat of categorias" class="cursor-pointer">
         <app-card [id]="cat.id" [nombre]="cat.nombre" [cantidad]="cat.cantidad"></app-card>
       </div>

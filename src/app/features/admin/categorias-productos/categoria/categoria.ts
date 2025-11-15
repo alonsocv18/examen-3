@@ -10,11 +10,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class Categoria implements OnInit {
   idCategoria: string = '';
   nombreCategoria: string = '';
+  private categoriaIdOriginal: string = '';
+  private categoriaNombreOriginal: string = '';
 
-  subcategorias = [
-    { id: 1, nombre: 'Bebidas Frias' },
-    { id: 2, nombre: 'Bebidas Calientes' },
-  ];
+  subcategoriasPorCategoria: { [key: string]: { id: number; nombre: string }[] } = {
+    '1': [
+      { id: 1, nombre: 'Bebidas Frias' },
+      { id: 2, nombre: 'Bebidas Calientes' },
+    ],
+    '2': [{ id: 3, nombre: 'Extras' }],
+    // Agrega más categorías y subcategorías según tu necesidad
+  };
+
+  get subcategorias() {
+    return this.subcategoriasPorCategoria[this.idCategoria] || [];
+  }
 
   // Simulación de productos por categoría
   productos = [
@@ -41,13 +51,28 @@ export class Categoria implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.idCategoria = params['id'];
-      this.nombreCategoria = params['nombre'];
+    // Suscribirse solo para detectar cambios cuando vuelves con el navegador
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id') || '';
+      const nombre = params.get('nombre') || '';
+      // Solo actualizar si los parámetros son de categoría (no de subcategoría)
+      if (id !== '' && nombre !== '' && !params.has('id_subcategoria')) {
+        this.idCategoria = id;
+        this.nombreCategoria = nombre;
+        this.categoriaIdOriginal = id;
+        this.categoriaNombreOriginal = nombre;
+      }
     });
   }
 
   irASubcategoria(id: number, nombre: string) {
-    this.router.navigate(['subcategorias', id, nombre], { relativeTo: this.route });
+    this.router.navigate([
+      '/admin/categorias-productos/categoria',
+      this.categoriaIdOriginal,
+      this.categoriaNombreOriginal,
+      'subcategorias',
+      id,
+      nombre,
+    ]);
   }
 }

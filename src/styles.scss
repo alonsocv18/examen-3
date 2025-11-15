@@ -65,6 +65,9 @@ p-button {
 }
 
 .page-section__header-title {
+  @apply text-2xl font-semibold text-gray-800 m-0;
+}
+.page-section__header-subtitle {
   @apply text-xl font-semibold text-gray-800 m-0;
 }
 
@@ -217,13 +220,7 @@ p-button {
 
 /* MODAL FORMULARIO (Refactorizado de .section-..., .label-..., etc.) */
 .form-modal__group {
-  /* Clase base para grupos de formulario, sin estilos por defecto */
-}
-.form-modal__group--centered {
-  @apply text-center;
-}
-.form-modal__group--top-margin {
-  @apply mt-6;
+  @apply flex flex-col items-center;
 }
 
 .form-modal__label {
@@ -238,7 +235,7 @@ p-button {
 }
 
 .form-modal__stepper {
-  @apply inline-flex items-center justify-center rounded-full bg-gray-100 p-1; /* Unifica .stepper-container */
+  @apply inline-flex items-center justify-center rounded-full bg-gray-100 p-1 py-4; /* Unifica .stepper-container */
 }
 
 .form-modal__stepper-btn {
@@ -279,4 +276,8 @@ p-button {
 
 .form-modal__button--save .form-modal__button-icon {
   @apply text-white; /* Estilo de .save-icon */
+}
+
+.text-primary {
+  @apply text-blue-500;
 }

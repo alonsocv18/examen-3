@@ -11,10 +11,13 @@ export class Card {
   @Input() nombre: string = '';
   @Input() cantidad: number = 0;
   @Input() id: number = 0;
+  @Input() disableNavigation: boolean = false;
 
   constructor(private router: Router) {}
 
   irACategoria() {
-    this.router.navigate(['admin/categorias-productos/categoria', this.id, this.nombre]);
+    if (!this.disableNavigation) {
+      this.router.navigate(['admin/categorias-productos/categoria', this.id, this.nombre]);
+    }
   }
 }
