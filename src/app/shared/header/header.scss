@@ -1,0 +1,40 @@
+@reference "tailwindcss";
+
+.header {
+  @apply h-16 bg-white shadow-md;
+  @apply flex items-center justify-between px-6;
+  @apply sticky top-0 z-10;
+}
+
+.header__search {
+  @apply flex items-center relative;
+}
+
+.header__icon {
+  @apply w-5 h-5 text-gray-400 absolute left-3;
+}
+
+.header__input {
+  @apply pl-10 pr-4 py-2 rounded-lg bg-gray-100;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.header__user-menu {
+  @apply flex items-center space-x-4;
+}
+
+.header__username {
+  @apply text-sm font-medium text-gray-700;
+}
+
+.header__avatar {
+  @apply w-10 h-10 rounded-full object-cover;
+}
+
+.sidebar-link {
+  @apply block w-full px-4 py-3 rounded-lg text-black transition-colors duration-200 ease-in-out hover:bg-gray-200;
+}
+
+.active-link {
+  @apply bg-white text-black font-semibold;
+}

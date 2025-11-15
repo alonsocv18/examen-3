@@ -1,7 +1,27 @@
-<header class="shadow-md sticky top-0 z-50 pt-8 pb-5">
-  <div class="container px-10 flex">
-    <div class="flex flex-row header-brand gap-7">
-      <span class="text-primary text-2xl font-bold text-gray-900 pb-2">Panel Admin</span>
+<header class="header">
+  <div class="header__user-menu">
+    <div class="card flex justify-center">
+      <p-drawer [(visible)]="visible" header="Drawer">
+        <nav>
+          <ul>
+            <li *ngFor="let item of navItems">
+              <a
+                class="sidebar-link"
+                [routerLink]="item.path"
+                routerLinkActive="active-link"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                {{ item.label }}
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </p-drawer>
+      <p-button (click)="visible = true">
+        <img src="assets/images/burguer-menu.png" />
+      </p-button>
     </div>
+
+    <span class="header__username">Bienvenido, Alonso</span>
   </div>
 </header>
