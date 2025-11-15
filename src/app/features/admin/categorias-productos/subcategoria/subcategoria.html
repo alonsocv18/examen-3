@@ -7,19 +7,6 @@
     <span class="page-section__header-title">
       Subcategoría: <span class="text-primary">{{ nombreSubcategoria }}</span>
     </span>
-    <button class="ml-auto pr-6 cursor-pointer" (click)="showModal = true">
-      <span class="text-primary">Crear subcategoria</span>
-    </button>
-    <app-modal
-      [visible]="showModal"
-      (visibleChange)="showModal = $event"
-      header="Crear Subcategoría"
-    >
-      <app-crear-subcategoria-form
-        (guardar)="crearSubcategoria($event)"
-        (cancelar)="showModal = false"
-      ></app-crear-subcategoria-form>
-    </app-modal>
   </div>
 
   <p-divider type="solid" />
@@ -57,11 +44,16 @@
 
   <div class="px-10">
     <!--- CRUD PRODUCTOS --->
+    <div *ngIf="isLoadingProductos" class="py-4">
+      <p>Cargando productos...</p>
+    </div>
+
     <app-table
+      *ngIf="!isLoadingProductos"
       [columns]="[
-        { field: 'nombre', header: 'Producto' },
-        { field: 'stock', header: 'Stock' },
-        { field: 'precio', header: 'Precio' },
+        { field: 'product_name', header: 'Producto' },
+        { field: 'product_stock', header: 'Stock' },
+        { field: 'product_price', header: 'Precio' },
         { field: 'acciones', header: 'Acciones' }
       ]"
       [data]="productos"

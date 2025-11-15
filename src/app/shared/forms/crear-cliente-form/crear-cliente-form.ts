@@ -15,7 +15,6 @@ export class CrearClienteForm implements OnChanges {
     numDocumento: string;
     telefono: string;
     correo: string;
-    estado: string;
   }>();
   @Output() cancelar = new EventEmitter<void>();
 
@@ -24,31 +23,30 @@ export class CrearClienteForm implements OnChanges {
   numDocumento: string = '';
   telefono: string = '';
   correo: string = '';
-  estado: string = 'Activo';
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['clienteEditar'] && this.clienteEditar) {
-      this.nombre = this.clienteEditar.nombre || '';
-      this.tipoDocumento = this.clienteEditar.tipoDocumento || 'DNI';
-      this.numDocumento = this.clienteEditar.numDocumento || '';
-      this.telefono = this.clienteEditar.telefono || '';
-      this.correo = this.clienteEditar.correo || '';
-      this.estado = this.clienteEditar.estado || 'Activo';
+      this.nombre = this.clienteEditar.customer_name || this.clienteEditar.nombre || '';
+      this.tipoDocumento =
+        this.clienteEditar.customer_typedocument || this.clienteEditar.tipoDocumento || 'DNI';
+      this.numDocumento =
+        this.clienteEditar.customer_document || this.clienteEditar.numDocumento || '';
+      this.telefono = this.clienteEditar.customer_phone || this.clienteEditar.telefono || '';
+      this.correo = this.clienteEditar.customer_email || this.clienteEditar.correo || '';
     }
   }
 
   onSubmit() {
-    if (this.nombre.trim()) {
+    if (this.nombre.trim() && this.correo.trim()) {
       const data: any = {
         nombre: this.nombre,
         tipoDocumento: this.tipoDocumento,
         numDocumento: this.numDocumento,
         telefono: this.telefono,
         correo: this.correo,
-        estado: this.estado,
       };
-      if (this.clienteEditar && this.clienteEditar.id) {
-        data.id = this.clienteEditar.id;
+      if (this.clienteEditar) {
+        data.id = this.clienteEditar.customer_id || this.clienteEditar.id;
       }
       this.guardar.emit(data);
       this.limpiar();
@@ -66,6 +64,5 @@ export class CrearClienteForm implements OnChanges {
     this.numDocumento = '';
     this.telefono = '';
     this.correo = '';
-    this.estado = 'Activo';
   }
 }

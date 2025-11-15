@@ -77,9 +77,15 @@ export class Categoria implements OnInit {
     this.isLoadingProductos = true;
     this.productService.getProducts(undefined, this.idCategoria, 1).subscribe({
       next: (response) => {
-        console.log('Respuesta productos:', response);
         if (response.tipo === '1' && response.data) {
-          this.productos = response.data;
+          // Filtrar productos que pertenecen a esta categoría
+          this.productos = response.data.filter(
+            (prod: Product) => prod.category_id?.toString() === this.idCategoria.toString()
+          );
+          console.log(
+            `Productos filtrados para categoría ${this.idCategoria}:`,
+            this.productos.length
+          );
         } else {
           this.productos = [];
         }
@@ -242,5 +248,10 @@ export class Categoria implements OnInit {
       subcategoria.category_id,
       subcategoria.category_name,
     ]);
+  }
+
+  // Helper para parseInt en el template
+  parseInt(value: string): number {
+    return parseInt(value, 10);
   }
 }

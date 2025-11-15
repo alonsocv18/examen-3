@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Product, ProductRequest, ProductUpdateRequest } from '../interfaces/product.interface';
@@ -13,7 +13,13 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   // POST - Listado de productos (con filtros opcionales)
-  getProducts(productName?: string, categoryId?: number, isGestion?: number): Observable<any> {
+  getProducts(
+    productName?: string,
+    categoryId?: number,
+    isGestion?: number,
+    limit: number = 100,
+    offset: number = 0
+  ): Observable<any> {
     const body: any = {};
 
     if (productName) {
@@ -25,8 +31,12 @@ export class ProductService {
     if (isGestion !== undefined) {
       body.isGestion = isGestion;
     }
-
-    console.log('getProducts body:', body); // Debug
+    if (limit !== undefined) {
+      body.limit = limit;
+    }
+    if (offset !== undefined) {
+      body.offset = offset;
+    }
 
     return this.http.post(`${this.apiUrl}/api/rest/product/getProducts`, body);
   }

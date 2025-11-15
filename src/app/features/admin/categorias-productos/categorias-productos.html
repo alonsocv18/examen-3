@@ -78,42 +78,6 @@
               <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
             </svg>
           </button>
-          <button
-            [class]="
-              esActivo(cat.category_state)
-                ? 'bg-red-500 hover:bg-red-600'
-                : 'bg-green-500 hover:bg-green-600'
-            "
-            class="text-white p-1 rounded"
-            (click)="cambiarEstadoCategoria(cat); $event.preventDefault(); $event.stopPropagation()"
-            [title]="esActivo(cat.category_state) ? 'Inactivar' : 'Activar'"
-          >
-            <svg
-              *ngIf="esActivo(cat.category_state)"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="m4.9 4.9 14.2 14.2"></path>
-            </svg>
-            <svg
-              *ngIf="!esActivo(cat.category_state)"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </button>
         </div>
       </div>
     </div>

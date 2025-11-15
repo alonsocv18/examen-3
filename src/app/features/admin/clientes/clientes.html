@@ -46,14 +46,19 @@
 
 <!-- Tabla CRUD -->
 <div class="px-10">
+  <div *ngIf="isLoading" class="py-4">
+    <p>Cargando clientes...</p>
+  </div>
+
   <app-table
+    *ngIf="!isLoading"
     [columns]="[
-      { field: 'nombre', header: 'Cliente' },
-      { field: 'tipoDocumento', header: 'Tipo documento' },
-      { field: 'numDocumento', header: 'Num. documento' },
-      { field: 'telefono', header: 'Teléfono' },
-      { field: 'correo', header: 'Correo' },
-      { field: 'estado', header: 'Estado' },
+      { field: 'customer_name', header: 'Cliente' },
+      { field: 'customer_typedocument', header: 'Tipo documento' },
+      { field: 'customer_numberdocument', header: 'Num. documento' },
+      { field: 'customer_phone', header: 'Teléfono' },
+      { field: 'customer_email', header: 'Correo' },
+      { field: 'customer_state', header: 'Estado' },
       { field: 'acciones', header: 'Acciones' }
     ]"
     [data]="clientes"

@@ -31,13 +31,25 @@
 </div>
 
 <div class="grid grid-cols-5 gap-4 py-4 px-10">
-  <app-card
+  <div
     *ngFor="let sub of subcategorias"
-    [nombre]="sub.category_name"
-    [cantidad]="0"
-    [disableNavigation]="true"
-    (click)="irASubcategoria(sub)"
-  ></app-card>
+    [routerLink]="[
+      '/admin/categorias-productos/categoria',
+      idCategoria,
+      nombreCategoria,
+      'subcategorias',
+      sub.category_id,
+      sub.category_name
+    ]"
+    class="cursor-pointer"
+  >
+    <app-card
+      [id]="sub.category_id"
+      [nombre]="sub.category_name"
+      [cantidad]="parseInt(sub.cantidad_productos?.toString() || '0')"
+      [disableNavigation]="true"
+    ></app-card>
+  </div>
 </div>
 
 <div *ngIf="!isLoadingSubcategorias && subcategorias.length === 0" class="px-10 py-2">
