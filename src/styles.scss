@@ -49,3 +49,234 @@ p-button {
 .auth-form__end-section {
   @apply flex flex-col items-center pt-3 gap-5;
 }
+
+/* --- ESTILOS SECCIONES --- */
+.page-section {
+  @apply flex flex-col h-full w-full bg-white;
+}
+
+/* Header */
+.page-section__header {
+  @apply flex items-center gap-3 px-5 pt-4 bg-white;
+}
+
+.page-section__header-icon {
+  @apply w-6 h-6 text-gray-700;
+}
+
+.page-section__header-title {
+  @apply text-xl font-semibold text-gray-800 m-0;
+}
+
+/* Content */
+.page-section__content {
+  @apply flex flex-1 overflow-hidden gap-2;
+}
+
+/* Sidebar */
+.page-section__sidebar {
+  @apply flex flex-col w-80;
+}
+
+.page-section__sidebar-header {
+  @apply px-4 py-3 bg-white border-gray-300;
+}
+
+.page-section__sidebar-title {
+  @apply text-base font-semibold text-gray-700 m-0;
+}
+
+/* Search */
+.page-section__search {
+  @apply flex items-center gap-2 px-4 pb-3 bg-white;
+}
+
+.page-section__search-input {
+  @apply flex-1 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.page-section__search-button {
+  @apply flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors cursor-pointer;
+}
+
+/* List */
+.page-section__list {
+  @apply flex-1 overflow-y-auto px-4 py-2;
+}
+
+/* Item */
+.page-section__item {
+  @apply mb-3 p-4 bg-white border border-gray-300 rounded-lg shadow-sm cursor-pointer;
+}
+
+.page-section__item--selected {
+  @apply border-blue-500 border-2;
+}
+
+.page-section__item-header {
+  @apply mb-2;
+}
+
+.page-section__item-name {
+  @apply text-base font-semibold text-gray-800 m-0;
+}
+
+.page-section__item-info {
+  @apply flex items-center gap-2 mb-3 text-sm;
+}
+
+.page-section__item-icon {
+  @apply w-4 h-4 text-gray-600;
+}
+
+.page-section__item-count {
+  @apply text-gray-600;
+}
+
+.page-section__item-status {
+  @apply ml-auto px-2 py-1 text-xs font-medium rounded;
+}
+
+.page-section__item-status--active {
+  @apply text-green-700 bg-green-100;
+}
+
+.page-section__item-status--inactive {
+  @apply text-red-700 bg-red-100;
+}
+
+.page-section__item-actions {
+  @apply flex gap-2;
+}
+
+.page-section__item-button {
+  @apply flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded transition-colors cursor-pointer;
+}
+
+.page-section__item-button--edit {
+  @apply text-blue-600 bg-white border border-blue-600 hover:bg-blue-50;
+}
+
+.page-section__item-button--inactive {
+  @apply text-red-600 bg-white border border-red-600 hover:bg-red-50;
+}
+
+.page-section__item-button--active {
+  @apply text-green-600 bg-white border border-green-600 hover:bg-green-50;
+}
+
+/* Main Panel */
+.page-section__main {
+  @apply flex flex-col flex-1 bg-white;
+}
+
+.page-section__main-header {
+  @apply flex items-center gap-3 px-5 pt-4 bg-gray-50;
+}
+
+.page-section__main-icon {
+  @apply w-5 h-5 text-gray-700;
+}
+
+.page-section__main-title {
+  @apply text-lg font-semibold text-gray-800 m-0;
+}
+
+/* Table */
+.page-section__table-header {
+  @apply flex items-center px-5 py-3 bg-gray-100 text-sm font-semibold text-gray-700;
+}
+
+.page-section__table-col {
+  @apply flex-1;
+}
+
+.page-section__table-col--acciones {
+  @apply text-right;
+}
+
+.page-section__table-body {
+  @apply flex-1 overflow-y-auto;
+}
+
+.page-section__table-row {
+  @apply flex items-center px-5 py-2 hover:bg-gray-50 transition-colors;
+}
+
+.page-section__table-cell {
+  @apply flex-1 text-sm text-gray-800;
+}
+
+.page-section__table-cell--actions {
+  @apply flex justify-end;
+}
+
+.page-section__table-button {
+  @apply flex items-center justify-center w-8 h-8 text-blue-600 hover:bg-blue-50 rounded transition-colors cursor-pointer;
+}
+
+/* MODAL FORMULARIO (Refactorizado de .section-..., .label-..., etc.) */
+.form-modal__group {
+  /* Clase base para grupos de formulario, sin estilos por defecto */
+}
+.form-modal__group--centered {
+  @apply text-center;
+}
+.form-modal__group--top-margin {
+  @apply mt-6;
+}
+
+.form-modal__label {
+  @apply mb-2 block text-sm font-medium text-gray-700;
+}
+.form-modal__label--stepper {
+  @apply mb-4 flex items-center justify-center gap-2 text-base; /* Unifica .label-cantidad-mesas */
+}
+
+.form-modal__label-icon {
+  @apply h-5 w-5 text-gray-500; /* Unifica .chair-icon */
+}
+
+.form-modal__stepper {
+  @apply inline-flex items-center justify-center rounded-full bg-gray-100 p-1; /* Unifica .stepper-container */
+}
+
+.form-modal__stepper-btn {
+  @apply px-5 py-1 text-2xl font-medium text-blue-600; /* Unifica .stepper-btn */
+}
+
+.form-modal__stepper-value {
+  @apply min-w-[50px] px-2 text-2xl font-bold text-gray-900; /* Unifica .stepper-value */
+}
+
+.form-modal__input {
+  @apply block w-full rounded-lg border border-gray-300 p-3 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500; /* Unifica .input-nombre-salon */
+}
+
+.form-modal__footer {
+  @apply mt-6 grid grid-cols-2 border-t border-gray-200; /* Unifica .modal-footer */
+}
+
+.form-modal__button {
+  @apply flex flex-col items-center justify-center gap-2 p-4 text-sm font-medium; /* Estilos base de .footer-button-* */
+}
+
+.form-modal__button--cancel {
+  @apply border-r border-gray-200 bg-white text-gray-700 hover:bg-gray-50; /* Unifica .footer-button-cancel */
+}
+
+.form-modal__button--save {
+  @apply bg-blue-600 text-white hover:bg-blue-700; /* Unifica .footer-button-save */
+}
+
+.form-modal__button-icon {
+  @apply h-6 w-6; /* Base para .cancel-icon y .save-icon */
+}
+
+.form-modal__button--cancel .form-modal__button-icon {
+  @apply text-gray-700; /* Estilo de .cancel-icon */
+}
+
+.form-modal__button--save .form-modal__button-icon {
+  @apply text-white; /* Estilo de .save-icon */
+}

@@ -1,38 +1,38 @@
-<div class="salones-mesas">
+<div class="page-section">
   <!-- Header -->
-  <div class="salones-mesas__header">
-    <div class="salones-mesas__header-icon">
+  <div class="page-section__header">
+    <div class="page-section__header-icon">
       <!--AQUI VA UN ICONO GAA-->
     </div>
-    <h1 class="salones-mesas__header-title">Salones y mesas</h1>
+    <h1 class="page-section__header-title">Salones y mesas</h1>
   </div>
 
   <p-divider type="solid" />
 
   <!-- Main Content -->
-  <div class="salones-mesas__content">
+  <div class="page-section__content">
     <!-- Lado izquierdo: Listado de salones -->
-    <div class="salones-mesas__sidebar">
-      <div class="salones-mesas__sidebar-header">
-        <h2 class="salones-mesas__sidebar-title">Listado de salones</h2>
+    <div class="page-section__sidebar">
+      <div class="page-section__sidebar-header">
+        <h2 class="page-section__sidebar-title">Listado de salones</h2>
         <p-divider type="solid" />
       </div>
 
       <!-- Search Bar -->
-      <div class="salones-mesas__search">
-        <input type="text" class="salones-mesas__search-input" placeholder="Buscar..." />
-        <p-button label="+" (click)="showDialog()"></p-button>
+      <div class="page-section__search">
+        <input pInputText type="text" pSize="large" placeholder="Buscar" />
+        <p-button styleClass="h-12 w-12" label="+" (click)="showDialog()"></p-button>
         <app-modal [visible]="showModal" (visibleChange)="closeDialog()" header="Crear Salón">
           <form (ngSubmit)="crearSalon()">
-            <div class="section-cantidad-mesas">
-              <label class="label-cantidad-mesas">
-                <i class="pi pi-table chair-icon"></i>
+            <div class="form-modal__group">
+              <label class="form-modal__label">
+                <i class="pi pi-table form-modal__label-icon"></i>
                 Cantidad de mesas
               </label>
-              <div class="stepper-container">
+              <div class="form-modal__stepper">
                 <button
                   type="button"
-                  class="stepper-btn"
+                  class="form-modal__stepper-btn"
                   (click)="
                     nuevoSalon.cantidadMesas =
                       nuevoSalon.cantidadMesas > 0 ? nuevoSalon.cantidadMesas - 1 : 0
@@ -40,10 +40,12 @@
                 >
                   &minus;
                 </button>
-                <span class="stepper-value">{{ nuevoSalon.cantidadMesas | number : '2.0' }}</span>
+                <span class="form-modal__stepper-value">{{
+                  nuevoSalon.cantidadMesas | number : '2.0'
+                }}</span>
                 <button
                   type="button"
-                  class="stepper-btn"
+                  class="form-modal__stepper-btn"
                   (click)="nuevoSalon.cantidadMesas = nuevoSalon.cantidadMesas + 1"
                 >
                   +
@@ -51,21 +53,25 @@
               </div>
             </div>
 
-            <div class="section-nombre-salon">
-              <label class="label-nombre-salon">Nombre del salón</label>
+            <div class="form-modal__group">
+              <label class="form-modal__label">Nombre del salón</label>
               <input
                 type="text"
-                class="input-nombre-salon"
+                class="form-modal__input"
                 [(ngModel)]="nuevoSalon.nombre"
                 name="nuevoSalonNombre"
                 placeholder="Ejm: Terraza"
               />
             </div>
 
-            <div class="modal-footer">
-              <button type="button" (click)="closeDialog()" class="footer-button-cancel">
+            <div class="form-modal__footer">
+              <button
+                type="button"
+                (click)="closeDialog()"
+                class="form-modal__button form-modal__button--cancel"
+              >
                 <svg
-                  class="cancel-icon"
+                  class="form-modal__button-icon"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
                   height="24"
@@ -82,9 +88,9 @@
                 </svg>
                 <span>Cancelar</span>
               </button>
-              <button type="submit" class="footer-button-save">
+              <button type="submit" class="form-modal__button form-modal__button--save">
                 <svg
-                  class="save-icon"
+                  class="form-modal__button-icon"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
                   height="24"
@@ -107,26 +113,26 @@
       </div>
 
       <!-- Salones List -->
-      <div class="salones-mesas__list">
+      <div class="page-section__list">
         <!-- Implementando salones -->
-        <div class="salones-mesas__item" *ngFor="let salon of salones; let i = index">
-          <div class="salones-mesas__item-header">
-            <h3 class="salones-mesas__item-name">{{ salon.nombre }}</h3>
+        <div class="page-section__item" *ngFor="let salon of salones; let i = index">
+          <div class="page-section__item-header">
+            <h3 class="page-section__item-name">{{ salon.nombre }}</h3>
           </div>
-          <div class="salones-mesas__item-info">
+          <div class="page-section__item-info">
             <!-- AQUI VA UN SVG ICONO -->
-            <span class="salones-mesas__item-count">{{ salon.cantidadMesas }} mesas</span>
+            <span class="page-section__item-count">{{ salon.cantidadMesas }} mesas</span>
             <span
-              class="salones-mesas__item-status"
-              [class.salones-mesas__item-status--active]="true"
-              [class.salones-mesas__item-status--inactive]="false"
+              class="page-section__item-status"
+              [class.page-section__item-status--active]="true"
+              [class.page-section__item-status--inactive]="false"
             >
               Activo
             </span>
           </div>
-          <div class="salones-mesas__item-actions">
+          <div class="page-section__item-actions">
             <button
-              class="salones-mesas__item-button salones-mesas__item-button--edit"
+              class="page-section__item-button page-section__item-button--edit"
               (click)="openModal(i)"
             >
               <svg
@@ -150,7 +156,7 @@
               <form (ngSubmit)="guardarCambios(i)">
                 <label>Nombre del salón</label>
                 <input type="text" [(ngModel)]="salones[i].nombre" name="nombreSalon{{ i }}" />
-                <div class="acciones-modal">
+                <div class="form-modal__footer">
                   <button type="button" (click)="closeModal()">Cancelar</button>
                   <button type="submit">Guardar cambios</button>
                 </div>
@@ -159,7 +165,7 @@
 
             <button
               *ngIf="true"
-              class="salones-mesas__item-button salones-mesas__item-button--inactive"
+              class="page-section__item-button page-section__item-button--inactive"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -177,7 +183,7 @@
             </button>
             <button
               *ngIf="!true"
-              class="salones-mesas__item-button salones-mesas__item-button--active"
+              class="page-section__item-button page-section__item-button--active"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -200,10 +206,10 @@
     <p-divider layout="vertical" />
 
     <!-- Lado derecho: Mesas de cada salón -->
-    <div class="salones-mesas__main">
-      <div class="salones-mesas__main-header">
+    <div class="page-section__main">
+      <div class="page-section__main-header">
         <svg
-          class="salones-mesas__main-icon"
+          class="page-section__main-icon"
           xmlns="http://www.w3.org/2000/svg"
           width="20"
           height="20"
@@ -216,24 +222,24 @@
           <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"></path>
           <path d="M12 3v6"></path>
         </svg>
-        <h2 class="salones-mesas__main-title">Mesas del salon Pollito pio</h2>
+        <h2 class="page-section__main-title">Mesas del salon Pollito pio</h2>
       </div>
       <p-divider type="solid" />
       <!-- Table Header -->
-      <div class="salones-mesas__table-header">
-        <div class="salones-mesas__table-col salones-mesas__table-col--mesa">Mesa</div>
-        <div class="salones-mesas__table-col salones-mesas__table-col--acciones">Acciones</div>
+      <div class="page-section__table-header">
+        <div class="page-section__table-col page-section__table-col--mesa">Mesa</div>
+        <div class="page-section__table-col page-section__table-col--acciones">Acciones</div>
       </div>
 
       <p-divider type="solid" />
 
       <!-- Table Rows -->
-      <div class="salones-mesas__table-body">
+      <div class="page-section__table-body">
         <!-- Ejemplo de row - usar con *ngFor="let mesa of mesas" -->
-        <div class="salones-mesas__table-row">
-          <div class="salones-mesas__table-cell">Mesa 1</div>
-          <div class="salones-mesas__table-cell salones-mesas__table-cell--actions">
-            <button class="salones-mesas__table-button">
+        <div class="page-section__table-row">
+          <div class="page-section__table-cell">Mesa 1</div>
+          <div class="page-section__table-cell page-section__table-cell--actions">
+            <button class="page-section__table-button">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"

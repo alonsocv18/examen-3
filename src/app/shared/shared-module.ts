@@ -8,8 +8,12 @@ import { DrawerModule } from 'primeng/drawer';
 import { DividerModule } from 'primeng/divider';
 import { Modal } from './modal/modal';
 import { DialogModule } from 'primeng/dialog';
+import { SearchBar } from './search-bar/search-bar';
+import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
+import { Card } from './card/card';
 @NgModule({
-  declarations: [Header, Sidebar, Modal],
+  declarations: [Header, Sidebar, Modal, SearchBar, Card],
   imports: [
     CommonModule,
     SharedRoutingModule,
@@ -17,7 +21,20 @@ import { DialogModule } from 'primeng/dialog';
     DrawerModule,
     DividerModule,
     DialogModule,
+    InputTextModule,
+    CardModule,
   ],
-  exports: [ButtonModule, Header, Sidebar, DrawerModule, DividerModule, DialogModule, Modal],
+  exports: [
+    ButtonModule,
+    Header,
+    Sidebar,
+    DrawerModule,
+    DividerModule,
+    DialogModule,
+    Modal,
+    InputTextModule,
+    CardModule,
+    Card,
+  ],
 })
 export class SharedModule {}
