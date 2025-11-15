@@ -23,6 +23,10 @@ export class SalonesMesas implements OnInit {
   loadingSalones = false;
   loadingMesas = false;
 
+  // Edición inline
+  mesaEditando: number | null = null;
+  nombreEditando: string = '';
+
   // Modales
   showModal = false;
   showModalEditar = false;
@@ -90,9 +94,44 @@ export class SalonesMesas implements OnInit {
     this.mesaSeleccionada = mesa;
   }
 
-  // Ver detalles de mesa
-  verMesa(mesa: TableModel): void {
-    console.log('Detalles mesa:', mesa);
+  // Activar modo edición de mesa
+  editarMesa(mesa: TableModel): void {
+    this.mesaEditando = mesa.tablee_id;
+    this.nombreEditando = mesa.tablee_name;
+  }
+
+  // Guardar cambios de mesa
+  guardarMesa(mesa: TableModel): void {
+    const mesaActualizada = {
+      tablee_id: mesa.tablee_id,
+      tablee_name: this.nombreEditando,
+      tablee_state: mesa.tablee_state,
+      lounge_id: mesa.lounge_id,
+      customer_id: mesa.customer_id,
+      tablee_mozoid: mesa.tablee_mozoid,
+      tablee_mozo: mesa.tablee_mozo,
+      tablee_numberorders: mesa.tablee_numberorders,
+      tablee_comment: mesa.tablee_comment,
+      tablee_datefilled: mesa.tablee_datefilled,
+    };
+
+    this.tableService.updateTable(mesaActualizada).subscribe({
+      next: (response) => {
+        console.log('Mesa actualizada:', response);
+        if (response.tipo === '1') {
+          this.mesaEditando = null;
+          this.nombreEditando = '';
+          this.cargarMesas(this.salonSeleccionado!.lounge_id);
+        }
+      },
+      error: (err) => console.error('Error al actualizar mesa:', err),
+    });
+  }
+
+  // Cancelar edición
+  cancelarEdicion(): void {
+    this.mesaEditando = null;
+    this.nombreEditando = '';
   }
 
   // Crear un nuevo salón

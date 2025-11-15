@@ -177,30 +177,33 @@
           <!-- Table Header -->
           <div class="page-section__table-header">
             <div class="page-section__table-col page-section__table-col--mesa">Mesa</div>
-            <div class="page-section__table-col page-section__table-col--mozo">Mozo</div>
-            <div class="page-section__table-col page-section__table-col--estado">Estado</div>
-            <div class="page-section__table-col page-section__table-col--acciones">Acciones</div>
+            <div class="page-section__table-col page-section__table-col--acciones">Acción</div>
           </div>
 
           <p-divider type="solid" />
 
           <!-- Table Rows -->
           <div class="page-section__table-body">
-            <div
-              class="page-section__table-row"
-              *ngFor="let mesa of mesas"
-              [class.page-section__table-row--selected]="
-                mesaSeleccionada?.tablee_id === mesa.tablee_id
-              "
-              (click)="seleccionarMesa(mesa)"
-            >
-              <div class="page-section__table-cell">{{ mesa.tablee_name }}</div>
-              <div class="page-section__table-cell">{{ mesa.tablee_mozo || 'Sin asignar' }}</div>
-              <div class="page-section__table-cell">{{ mesa.tablee_state }}</div>
+            <div class="page-section__table-row" *ngFor="let mesa of mesas">
+              <!-- Nombre de mesa: editable si está en modo edición -->
+              <div class="page-section__table-cell">
+                <input
+                  *ngIf="mesaEditando === mesa.tablee_id"
+                  type="text"
+                  [(ngModel)]="nombreEditando"
+                  class="page-section__table-input"
+                  pInputText
+                />
+                <span *ngIf="mesaEditando !== mesa.tablee_id">{{ mesa.tablee_name }}</span>
+              </div>
+
+              <!-- Acciones: Editar o Guardar/Cancelar -->
               <div class="page-section__table-cell page-section__table-cell--actions">
+                <!-- Modo normal: botón Editar -->
                 <button
+                  *ngIf="mesaEditando !== mesa.tablee_id"
                   class="page-section__table-button"
-                  (click)="verMesa(mesa); $event.stopPropagation()"
+                  (click)="editarMesa(mesa)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -211,10 +214,49 @@
                     stroke="currentColor"
                     stroke-width="2"
                   >
-                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
                   </svg>
                 </button>
+
+                <!-- Modo edición: botones Guardar y Cancelar -->
+                <div
+                  *ngIf="mesaEditando === mesa.tablee_id"
+                  class="page-section__table-actions-group"
+                >
+                  <button
+                    class="page-section__table-button page-section__table-button--save"
+                    (click)="guardarMesa(mesa)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </button>
+                  <button
+                    class="page-section__table-button page-section__table-button--cancel"
+                    (click)="cancelarEdicion()"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
