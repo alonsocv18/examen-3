@@ -1,17 +1,77 @@
 <div class="page-section">
   <div class="page-section__header">
-    <div class="page-section__header-icon">
-      <!--AQUI VA UN ICONO GAA-->
-    </div>
     <h1 class="page-section__header-title">Categorias y productos</h1>
   </div>
   <p-divider type="solid" />
   <div class="page-section__header">
-    <div class="page-section__header-icon">
-      <!--AQUI VA UN ICONO GAA-->
-    </div>
     <input type="text" placeholder="Buscar categoria" pInputText fluid />
-    <p-button styleClass="h-auto w-40" label="Crear categoria"></p-button>
+    <p-button
+      styleClass="h-auto w-40"
+      label="Crear categoria"
+      (click)="showModalCategoria = true"
+    ></p-button>
+    <app-modal
+      [visible]="showModalCategoria"
+      (visibleChange)="showModalCategoria = $event"
+      header="Crear Categoría"
+    >
+      <form class="p-0 m-0" (ngSubmit)="crearCategoria()">
+        <div class="form-modal__group">
+          <label class="form-modal__label">Nombre de la categoría</label>
+          <input
+            type="text"
+            class="form-modal__input"
+            [(ngModel)]="nuevaCategoria.nombre"
+            name="nuevaCategoriaNombre"
+            placeholder="Ejm: Bebidas"
+          />
+        </div>
+        <div class="form-modal__footer">
+          <button
+            type="button"
+            (click)="showModalCategoria = false"
+            class="form-modal__button form-modal__button--cancel"
+          >
+            <svg
+              class="form-modal__button-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+            <span>Cancelar</span>
+          </button>
+          <button type="submit" class="form-modal__button form-modal__button--save">
+            <svg
+              class="form-modal__button-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+              <polyline points="17 21 17 13 7 13 7 21" />
+              <polyline points="7 3 7 8 15 8" />
+            </svg>
+            <span>Crear categoría</span>
+          </button>
+        </div>
+      </form>
+    </app-modal>
   </div>
   <div class="page-section__table-body">
     <div class="grid grid-cols-5 grid-rows-5 gap-4 py-4 px-13">

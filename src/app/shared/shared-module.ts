@@ -14,8 +14,10 @@ import { CardModule } from 'primeng/card';
 import { Card } from './card/card';
 import { Table } from './table/table';
 import { TableModule } from 'primeng/table';
+import { SelectModule } from 'primeng/select';
+import { Selector } from './selector/selector';
 @NgModule({
-  declarations: [Header, Sidebar, Modal, SearchBar, Card, Table],
+  declarations: [Header, Sidebar, Modal, SearchBar, Card, Table, Selector],
   imports: [
     CommonModule,
     SharedRoutingModule,
@@ -26,6 +28,7 @@ import { TableModule } from 'primeng/table';
     InputTextModule,
     CardModule,
     TableModule,
+    SelectModule,
   ],
   exports: [
     ButtonModule,
@@ -40,6 +43,8 @@ import { TableModule } from 'primeng/table';
     Card,
     TableModule,
     Table,
+    SelectModule,
+    Selector,
   ],
 })
 export class SharedModule {}

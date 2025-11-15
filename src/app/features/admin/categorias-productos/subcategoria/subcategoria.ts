@@ -8,6 +8,28 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './subcategoria.scss',
 })
 export class Subcategoria implements OnInit {
+  showModalProducto: boolean = false;
+  nuevoProducto = { nombre: '', stock: 0, precio: 0 };
+  crearProducto() {
+    if (this.nuevoProducto.nombre.trim()) {
+      // Aquí podrías agregar lógica para guardar el producto
+      // Por ahora solo cierra el modal y limpia el campo
+      // Ejemplo: alert('Producto creado: ' + this.nuevoProducto.nombre);
+      this.nuevoProducto = { nombre: '', stock: 0, precio: 0 };
+      this.showModalProducto = false;
+    }
+  }
+  showModal: boolean = false;
+  nuevaSubcategoria = { nombre: '' };
+  crearSubcategoria() {
+    if (this.nuevaSubcategoria.nombre.trim()) {
+      // Aquí podrías agregar lógica para guardar la subcategoría
+      // Por ahora solo cierra el modal y limpia el campo
+      // Ejemplo: alert('Subcategoría creada: ' + this.nuevaSubcategoria.nombre);
+      this.nuevaSubcategoria.nombre = '';
+      this.showModal = false;
+    }
+  }
   idSubcategoria: string = '';
   nombreSubcategoria: string = '';
   idCategoria: string = '';

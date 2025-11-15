@@ -8,6 +8,18 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './categoria.scss',
 })
 export class Categoria implements OnInit {
+  showModalProducto: boolean = false;
+  nuevoProducto = { nombre: '', stock: 0, precio: 0 };
+  crearProducto() {
+    if (this.nuevoProducto.nombre.trim()) {
+      // Aquí podrías agregar lógica para guardar el producto
+      // Por ahora solo cierra el modal y limpia el campo
+      // Ejemplo: alert('Producto creado: ' + this.nuevoProducto.nombre);
+      this.nuevoProducto = { nombre: '', stock: 0, precio: 0 };
+      this.showModalProducto = false;
+    }
+  }
+  showModal: boolean = false;
   idCategoria: string = '';
   nombreCategoria: string = '';
   private categoriaIdOriginal: string = '';

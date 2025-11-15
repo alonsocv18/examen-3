@@ -1,9 +1,9 @@
 @import 'tailwindcss';
 
 p-button {
-  --p-button-primary-background: #000000;
-  --p-button-primary-hover-background: #000000;
-  --p-button-primary-active-background: #000000;
+  --p-button-primary-background: #5389e1;
+  --p-button-primary-hover-background: #5389e1;
+  --p-button-primary-active-background: #5389e1;
 
   --p-button-link-color: #ffffff;
   --p-button-link-hover-color: #ffffff;
@@ -13,12 +13,19 @@ p-button {
   --p-button-primary-hover-color: #ffffff;
   --p-button-primary-active-color: #ffffff;
 
-  --p-button-primary-border-color: #000000;
-  --p-button-primary-hover-border-color: #000000;
-  --p-button-primary-active-border-color: #000000;
+  --p-button-primary-border-color: #5389e1;
+  --p-button-primary-hover-border-color: #5389e1;
+  --p-button-primary-active-border-color: #5389e1;
 
-  --p-button-primary-focus-ring-color: #000000;
+  --p-button-primary-focus-ring-color: #5389e1;
   --p-button-primary-focus-ring-shadow: none;
+}
+
+.raleway-font {
+  font-family: 'Raleway', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 291;
+  font-style: normal;
 }
 
 /* --- ESTILOS AUTH (login y registro) --- */
@@ -61,7 +68,7 @@ p-button {
 }
 
 .page-section__header-icon {
-  @apply w-6 h-6 text-gray-700;
+  @apply w-6 h-6 text-gray-700 bg-[#5389e1];
 }
 
 .page-section__header-title {
