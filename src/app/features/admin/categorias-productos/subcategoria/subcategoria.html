@@ -1,4 +1,6 @@
+<!-- Sección principal de subcategoría -->
 <div class="page-section">
+  <!-- Encabezado con botón volver y nombre de subcategoría -->
   <div class="page-section__header">
     <p-button
       label="Volver"
@@ -11,6 +13,7 @@
 
   <p-divider type="solid" />
 
+  <!-- Barra de búsqueda y creación de productos -->
   <div class="flex flex-row gap-2 px-10">
     <input type="text" placeholder="Buscar productos de la categoria" pInputText fluid />
     <p-button
@@ -42,12 +45,14 @@
     </app-modal>
   </div>
 
+  <!-- Tabla de productos de la subcategoría -->
   <div class="px-10">
-    <!--- CRUD PRODUCTOS --->
+    <!-- Estado de carga -->
     <div *ngIf="isLoadingProductos" class="py-4">
       <p>Cargando productos...</p>
     </div>
 
+    <!-- Tabla con operaciones CRUD -->
     <app-table
       *ngIf="!isLoadingProductos"
       [columns]="[
@@ -57,6 +62,7 @@
         { field: 'acciones', header: 'Acciones' }
       ]"
       [data]="productos"
+      [stateField]="'product_state'"
       (edit)="editarProducto($event)"
       (delete)="eliminarProducto($event)"
     >

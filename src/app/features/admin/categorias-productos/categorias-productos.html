@@ -1,8 +1,14 @@
+<!-- Componente de notificaciones toast -->
+<p-toast></p-toast>
+
+<!-- Sección principal de categorías y productos -->
 <div class="page-section">
+  <!-- Encabezado de la página -->
   <div class="page-section__header">
     <h1 class="page-section__header-title">Categorias y productos</h1>
   </div>
   <p-divider type="solid" />
+  <!-- Barra de búsqueda y botón de creación -->
   <div class="page-section__header">
     <input type="text" placeholder="Buscar categoria" pInputText fluid />
     <p-button
@@ -37,17 +43,18 @@
     </app-modal>
   </div>
 
-  <!-- Mensaje de carga -->
+  <!-- Estado de carga mientras se obtienen categorías -->
   <div *ngIf="isLoading" class="px-10 py-4">
     <p>Cargando categorías...</p>
   </div>
 
-  <!-- Mensaje sin categorías -->
+  <!-- Mensaje cuando no hay categorías -->
   <div *ngIf="!isLoading && categorias.length === 0" class="px-10 py-4">
     <p>No hay categorías disponibles</p>
   </div>
 
-  <!-- Grid de categorías -->
+  <!-- Grid principal de categorías con cards -->
+
   <div class="page-section__table-body">
     <div class="grid grid-cols-5 grid-rows-5 gap-4 py-4 px-13">
       <div *ngFor="let cat of categorias" class="cursor-pointer relative group">
@@ -57,7 +64,7 @@
           [cantidad]="cat.productCount || 0"
         ></app-card>
 
-        <!-- Botones de acción (aparecen al hover) -->
+        <!-- Botón de editar (visible al hover) -->
         <div
           class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
         >

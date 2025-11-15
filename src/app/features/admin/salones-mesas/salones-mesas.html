@@ -1,21 +1,26 @@
+<!-- Componente de notificaciones toast -->
+<p-toast></p-toast>
+
+<!-- Sección principal de salones y mesas -->
 <div class="page-section">
-  <!-- Header -->
+  <!-- Encabezado de la página -->
   <div class="page-section__header">
     <h1 class="page-section__header-title">Salones y mesas</h1>
   </div>
 
   <p-divider type="solid" />
 
-  <!-- Main Content -->
+  <!-- Contenedor principal dividido en dos paneles -->
   <div class="page-section__content">
-    <!-- Lado izquierdo: Listado de salones -->
+    <!-- Panel izquierdo: Lista de salones -->
+
     <div class="page-section__sidebar">
       <div class="page-section__sidebar-header">
         <h2 class="page-section__sidebar-title">Listado de salones</h2>
         <p-divider type="solid" />
       </div>
 
-      <!-- Search Bar -->
+      <!-- Barra de búsqueda y botón de crear salón -->
       <div class="page-section__search">
         <input pInputText type="text" pSize="large" placeholder="Buscar salón" />
         <p-button styleClass="h-12 w-12" label="+" (click)="showModal = true"></p-button>
@@ -29,19 +34,20 @@
         ></app-crear-salon-form>
       </app-modal>
 
-      <!-- Salones List -->
+      <!-- Contenedor de la lista de salones -->
       <div class="page-section__list">
-        <!-- Mensaje de carga -->
+        <!-- Estado de carga de salones -->
         <div *ngIf="loadingSalones" class="page-section__loading">
           <p>Cargando salones...</p>
         </div>
 
-        <!-- Mensaje si no hay salones -->
+        <!-- Mensaje cuando no hay salones -->
         <div *ngIf="!loadingSalones && salones.length === 0" class="page-section__empty">
           <p>No hay salones disponibles</p>
         </div>
 
-        <!-- Lista de salones -->
+        <!-- Lista iterativa de salones con acciones -->
+
         <div
           class="page-section__item"
           *ngFor="let salon of salones; let i = index"
@@ -61,6 +67,7 @@
               {{ esActivo(salon.lounge_state) ? 'Activo' : 'Inactivo' }}
             </span>
           </div>
+          <!-- Botones de acción para editar y cambiar estado del salón -->
           <div class="page-section__item-actions">
             <button
               class="page-section__item-button page-section__item-button--edit"
@@ -97,7 +104,7 @@
                 <circle cx="12" cy="12" r="10"></circle>
                 <path d="m4.9 4.9 14.2 14.2"></path>
               </svg>
-              Inactivar
+              Desactivar
             </button>
             <button
               *ngIf="!esActivo(salon.lounge_state)"
@@ -137,14 +144,15 @@
 
     <p-divider layout="vertical" />
 
-    <!-- Lado derecho: Mesas de cada salón -->
+    <!-- Panel derecho: Mesas del salón seleccionado -->
     <div class="page-section__main">
-      <!-- Mostrar cuando NO hay salón seleccionado -->
+      <!-- Mensaje cuando no hay salón seleccionado -->
       <div *ngIf="!salonSeleccionado" class="page-section__placeholder">
         <p>Selecciona un salón para ver sus mesas</p>
       </div>
 
-      <!-- Mostrar cuando SÍ hay salón seleccionado -->
+      <!-- Vista de mesas cuando hay un salón seleccionado -->
+
       <div *ngIf="salonSeleccionado">
         <div class="page-section__main-header">
           <svg
@@ -167,14 +175,15 @@
         </div>
         <p-divider type="solid" />
 
-        <!-- Mensaje de carga de mesas -->
+        <!-- Estado de carga de mesas -->
         <div *ngIf="loadingMesas" class="page-section__loading">
           <p>Cargando mesas...</p>
         </div>
 
-        <!-- Tabla de mesas -->
+        <!-- Tabla de mesas con edición inline -->
         <div *ngIf="!loadingMesas && mesas.length > 0">
-          <!-- Table Header -->
+          <!-- Encabezado de la tabla -->
+
           <div class="page-section__table-header">
             <div class="page-section__table-col page-section__table-col--mesa">Mesa</div>
             <div class="page-section__table-col page-section__table-col--acciones">Acción</div>
@@ -182,10 +191,10 @@
 
           <p-divider type="solid" />
 
-          <!-- Table Rows -->
+          <!-- Filas de la tabla con mesas -->
           <div class="page-section__table-body">
             <div class="page-section__table-row" *ngFor="let mesa of mesas">
-              <!-- Nombre de mesa: editable si está en modo edición -->
+              <!-- Celda del nombre de mesa, editable en modo edición -->
               <div class="page-section__table-cell">
                 <input
                   *ngIf="mesaEditando === mesa.tablee_id"
@@ -197,9 +206,9 @@
                 <span *ngIf="mesaEditando !== mesa.tablee_id">{{ mesa.tablee_name }}</span>
               </div>
 
-              <!-- Acciones: Editar o Guardar/Cancelar -->
+              <!-- Celda de acciones con modos normal y edición -->
               <div class="page-section__table-cell page-section__table-cell--actions">
-                <!-- Modo normal: botón Editar -->
+                <!-- Botón editar en modo normal -->
                 <button
                   *ngIf="mesaEditando !== mesa.tablee_id"
                   class="page-section__table-button"
@@ -218,7 +227,7 @@
                   </svg>
                 </button>
 
-                <!-- Modo edición: botones Guardar y Cancelar -->
+                <!-- Botones guardar y cancelar en modo edición -->
                 <div
                   *ngIf="mesaEditando === mesa.tablee_id"
                   class="page-section__table-actions-group"
@@ -262,7 +271,7 @@
           </div>
         </div>
 
-        <!-- Mensaje si no hay mesas -->
+        <!-- Mensaje cuando no hay mesas en el salón -->
         <div *ngIf="!loadingMesas && mesas.length === 0" class="page-section__empty">
           <span>No hay mesas </span>
         </div>

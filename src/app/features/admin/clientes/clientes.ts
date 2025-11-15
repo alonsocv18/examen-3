@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../../../core/services/customer.service';
 import { Customer } from '../../../core/interfaces/customer.interface';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-clientes',
@@ -15,7 +16,7 @@ export class Clientes implements OnInit {
   clientes: Customer[] = [];
   isLoading = false;
 
-  constructor(private customerService: CustomerService) {}
+  constructor(private customerService: CustomerService, private messageService: MessageService) {}
 
   ngOnInit() {
     this.cargarClientes();
@@ -35,6 +36,11 @@ export class Clientes implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar clientes:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar los clientes',
+        });
         this.clientes = [];
         this.isLoading = false;
       },
@@ -64,12 +70,22 @@ export class Clientes implements OnInit {
     this.customerService.createCustomer(nuevoCliente).subscribe({
       next: (response) => {
         if (response.tipo === '1') {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Cliente creado correctamente',
+          });
           this.showModalCliente = false;
           this.cargarClientes();
         }
       },
       error: (error) => {
         console.error('Error al crear cliente:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo crear el cliente',
+        });
       },
     });
   }
@@ -100,6 +116,11 @@ export class Clientes implements OnInit {
     this.customerService.updateCustomer(clienteActualizado).subscribe({
       next: (response) => {
         if (response.tipo === '1') {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Cliente actualizado correctamente',
+          });
           this.showModalEditar = false;
           this.clienteSeleccionado = null;
           this.cargarClientes();
@@ -107,6 +128,11 @@ export class Clientes implements OnInit {
       },
       error: (error) => {
         console.error('Error al actualizar cliente:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo actualizar el cliente',
+        });
       },
     });
   }
@@ -117,9 +143,15 @@ export class Clientes implements OnInit {
     this.showModalEditar = true;
   }
 
-  // Cambiar estado del cliente (desactivar)
+  // Cambiar estado del cliente (activar/desactivar)
   eliminarCliente(cliente: Customer) {
-    if (confirm(`¿Desactivar a ${cliente.customer_name}?`)) {
+    const nuevoEstado = cliente.customer_state === '1' ? '0' : '1';
+    const accion = nuevoEstado === '0' ? 'desactivar' : 'activar';
+    const accionTexto = nuevoEstado === '0' ? 'desactivado' : 'activado';
+
+    if (
+      confirm(`¿${accion.charAt(0).toUpperCase() + accion.slice(1)} a ${cliente.customer_name}?`)
+    ) {
       const clienteActualizado = {
         customer_id: cliente.customer_id,
         customer_name: cliente.customer_name,
@@ -127,18 +159,28 @@ export class Clientes implements OnInit {
         customer_document: cliente.customer_document,
         customer_phone: cliente.customer_phone,
         customer_email: cliente.customer_email,
-        customer_state: '0', // Desactivar
+        customer_state: nuevoEstado,
         store_id: cliente.store_id || parseInt(localStorage.getItem('store_id') || '1', 10),
       };
 
       this.customerService.updateCustomer(clienteActualizado).subscribe({
         next: (response) => {
           if (response.tipo === '1') {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: `Cliente ${accionTexto} correctamente`,
+            });
             this.cargarClientes();
           }
         },
         error: (error) => {
-          console.error('Error al desactivar cliente:', error);
+          console.error(`Error al ${accion} cliente:`, error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `No se pudo ${accion} el cliente`,
+          });
         },
       });
     }

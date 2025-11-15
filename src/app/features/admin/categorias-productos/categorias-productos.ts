@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../../../core/services/category.service';
 import { Category } from '../../../core/interfaces/category.interface';
+import { MessageService } from 'primeng/api';
 
 interface CategoryWithCount extends Category {
   productCount?: number;
@@ -19,7 +20,7 @@ export class CategoriasProductos implements OnInit {
   categorias: CategoryWithCount[] = [];
   isLoading: boolean = false;
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(private categoryService: CategoryService, private messageService: MessageService) {}
 
   ngOnInit() {
     this.cargarCategorias();
@@ -48,6 +49,11 @@ export class CategoriasProductos implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar categorías:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar las categorías',
+        });
         this.isLoading = false;
       },
     });
@@ -69,12 +75,22 @@ export class CategoriasProductos implements OnInit {
       next: (response) => {
         console.log('Categoría creada:', response);
         if (response.tipo === '1') {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Categoría creada correctamente',
+          });
           this.showModalCategoria = false;
           this.cargarCategorias();
         }
       },
       error: (error) => {
         console.error('Error al crear categoría:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo crear la categoría',
+        });
       },
     });
   }
@@ -102,6 +118,11 @@ export class CategoriasProductos implements OnInit {
       next: (response) => {
         console.log('Categoría actualizada:', response);
         if (response.tipo === '1') {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Categoría actualizada correctamente',
+          });
           this.showModalEditar = false;
           this.categoriaEditar = null;
           this.cargarCategorias();
@@ -109,6 +130,11 @@ export class CategoriasProductos implements OnInit {
       },
       error: (error) => {
         console.error('Error al actualizar categoría:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo actualizar la categoría',
+        });
       },
     });
   }
@@ -130,11 +156,21 @@ export class CategoriasProductos implements OnInit {
       next: (response) => {
         console.log('Estado cambiado:', response);
         if (response.tipo === '1') {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Estado cambiado correctamente',
+          });
           this.cargarCategorias();
         }
       },
       error: (error) => {
         console.error('Error al cambiar estado:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo cambiar el estado',
+        });
       },
     });
   }

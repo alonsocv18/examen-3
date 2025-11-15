@@ -3,6 +3,7 @@ import { LoungeService } from '../../../core/services/lounge.service';
 import { TableService } from '../../../core/services/table.service';
 import { Lounge } from '../../../core/interfaces/lounge.interface';
 import { TableModel } from '../../../core/interfaces/table.interface';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-salones-mesas',
@@ -32,7 +33,11 @@ export class SalonesMesas implements OnInit {
   showModalEditar = false;
   salonParaEditar: Lounge | null = null;
 
-  constructor(private loungeService: LoungeService, private tableService: TableService) {}
+  constructor(
+    private loungeService: LoungeService,
+    private tableService: TableService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.cargarSalones();
@@ -55,6 +60,11 @@ export class SalonesMesas implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar salones:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar los salones',
+        });
         this.loadingSalones = false;
       },
     });
@@ -83,6 +93,11 @@ export class SalonesMesas implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar mesas:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar las mesas',
+        });
         this.mesas = [];
         this.loadingMesas = false;
       },
@@ -119,12 +134,24 @@ export class SalonesMesas implements OnInit {
       next: (response) => {
         console.log('Mesa actualizada:', response);
         if (response.tipo === '1') {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Mesa actualizada correctamente',
+          });
           this.mesaEditando = null;
           this.nombreEditando = '';
           this.cargarMesas(this.salonSeleccionado!.lounge_id);
         }
       },
-      error: (err) => console.error('Error al actualizar mesa:', err),
+      error: (err) => {
+        console.error('Error al actualizar mesa:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo actualizar la mesa',
+        });
+      },
     });
   }
 
@@ -149,11 +176,23 @@ export class SalonesMesas implements OnInit {
       next: (response) => {
         console.log('Salón creado:', response);
         if (response.tipo === '1') {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Salón creado correctamente',
+          });
           this.showModal = false;
           this.cargarSalones();
         }
       },
-      error: (err) => console.error('Error al crear salón:', err),
+      error: (err) => {
+        console.error('Error al crear salón:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo crear el salón',
+        });
+      },
     });
   }
 
@@ -179,12 +218,24 @@ export class SalonesMesas implements OnInit {
       next: (response) => {
         console.log('Salón actualizado:', response);
         if (response.tipo === '1') {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Salón actualizado correctamente',
+          });
           this.showModalEditar = false;
           this.salonParaEditar = null;
           this.cargarSalones();
         }
       },
-      error: (err) => console.error('Error al actualizar salón:', err),
+      error: (err) => {
+        console.error('Error al actualizar salón:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo actualizar el salón',
+        });
+      },
     });
   }
 
@@ -206,10 +257,22 @@ export class SalonesMesas implements OnInit {
       next: (response) => {
         console.log('Estado cambiado:', response);
         if (response.tipo === '1') {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: `Salón ${nuevoEstado === '1' ? 'activado' : 'desactivado'} correctamente`,
+          });
           this.cargarSalones();
         }
       },
-      error: (err) => console.error('Error al cambiar estado:', err),
+      error: (err) => {
+        console.error('Error al cambiar estado:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo cambiar el estado del salón',
+        });
+      },
     });
   }
 

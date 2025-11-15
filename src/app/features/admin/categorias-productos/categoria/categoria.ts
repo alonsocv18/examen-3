@@ -182,16 +182,19 @@ export class Categoria implements OnInit {
     this.showModalEditar = true;
   }
 
-  // Cambiar estado del producto (no hay DELETE, solo cambio de estado)
+  // Cambiar estado del producto (activar/desactivar)
   eliminarProducto(producto: Product) {
-    if (confirm(`¿Desactivar ${producto.product_name}?`)) {
+    const nuevoEstado = producto.product_state === '1' ? '0' : '1';
+    const accion = nuevoEstado === '0' ? 'desactivar' : 'activar';
+
+    if (confirm(`¿${accion.charAt(0).toUpperCase() + accion.slice(1)} ${producto.product_name}?`)) {
       const productoActualizado = {
         product_id: producto.product_id,
         product_name: producto.product_name,
         product_price: producto.product_price,
         product_description: producto.product_description,
         product_urlimage: producto.product_urlimage,
-        product_state: '0', // Desactivar
+        product_state: nuevoEstado,
         product_stock: producto.product_stock,
         product_needpreparation: producto.product_needpreparation,
         category_id: producto.category_id,
@@ -200,13 +203,13 @@ export class Categoria implements OnInit {
 
       this.productService.updateProduct(productoActualizado).subscribe({
         next: (response) => {
-          console.log('Producto desactivado:', response);
+          console.log(`Producto ${nuevoEstado === '0' ? 'desactivado' : 'activado'}:`, response);
           if (response.tipo === '1') {
             this.cargarProductos();
           }
         },
         error: (error) => {
-          console.error('Error al desactivar producto:', error);
+          console.error(`Error al ${accion} producto:`, error);
         },
       });
     }

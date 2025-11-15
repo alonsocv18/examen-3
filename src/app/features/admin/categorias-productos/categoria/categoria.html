@@ -1,3 +1,4 @@
+<!-- Encabezado con botón de volver y nombre de categoría -->
 <div class="page-section__header">
   <p-button label="Volver" [routerLink]="['/admin/categorias-productos']"></p-button>
   <span class="page-section__header-title"
@@ -5,6 +6,7 @@
   >
 </div>
 <p-divider type="solid" />
+<!-- Sección de subcategorías con botón de creación -->
 <div class="flex items-center justify-between px-10">
   <span class="page-section__header-subtitle">Subcategorias:</span>
   <p-button
@@ -26,10 +28,12 @@
   ></app-crear-categoria-form>
 </app-modal>
 
+<!-- Estado de carga de subcategorías -->
 <div *ngIf="isLoadingSubcategorias" class="px-10 py-4">
   <p>Cargando subcategorías...</p>
 </div>
 
+<!-- Grid de subcategorías con navegación -->
 <div class="grid grid-cols-5 gap-4 py-4 px-10">
   <div
     *ngFor="let sub of subcategorias"
@@ -52,9 +56,11 @@
   </div>
 </div>
 
+<!-- Mensaje cuando no hay subcategorías -->
 <div *ngIf="!isLoadingSubcategorias && subcategorias.length === 0" class="px-10 py-2">
   <p class="text-gray-500">No hay subcategorías</p>
 </div>
+<!-- Barra de búsqueda y creación de productos -->
 <div class="flex flex-row px-10 gap-2">
   <input type="text" placeholder="Buscar productos de la categoria" pInputText fluid />
   <p-button
@@ -86,12 +92,14 @@
   </app-modal>
 </div>
 
-<!--- CRUD PRODUCTOS --->
+<!-- Tabla de productos con operaciones CRUD -->
 <div class="px-10">
+  <!-- Estado de carga de productos -->
   <div *ngIf="isLoadingProductos" class="py-4">
     <p>Cargando productos...</p>
   </div>
 
+  <!-- Tabla con datos y acciones de editar/eliminar -->
   <app-table
     *ngIf="!isLoadingProductos"
     [columns]="[
@@ -101,6 +109,7 @@
       { field: 'acciones', header: 'Acciones' }
     ]"
     [data]="productos"
+    [stateField]="'product_state'"
     (edit)="editarProducto($event)"
     (delete)="eliminarProducto($event)"
   >

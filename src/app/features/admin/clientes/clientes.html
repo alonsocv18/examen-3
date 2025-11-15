@@ -1,17 +1,21 @@
+<!-- Componente de notificaciones toast -->
+<p-toast></p-toast>
+
+<!-- Encabezado de la página -->
 <div class="page-section__header">
   <h1 class="page-section__header-title">Clientes</h1>
 </div>
 
 <p-divider type="solid" />
 
-<!-- Filtros y acciones -->
+<!-- Barra de búsqueda, filtros y botón de creación -->
 <div class="page-section__header">
   <input type="text" placeholder="Buscar categoria" pInputText fluid />
 
-  <!-- Filtro adicional -->
+  <!-- Selector de filtros -->
   <app-selector></app-selector>
 
-  <!-- Abrir modal de creación -->
+  <!-- Botón para abrir modal de creación -->
   <p-button
     styleClass="h-auto w-40"
     label="Crear cliente"
@@ -44,12 +48,14 @@
   </app-modal>
 </div>
 
-<!-- Tabla CRUD -->
+<!-- Tabla de clientes con operaciones CRUD -->
 <div class="px-10">
+  <!-- Estado de carga -->
   <div *ngIf="isLoading" class="py-4">
     <p>Cargando clientes...</p>
   </div>
 
+  <!-- Tabla con datos y acciones -->
   <app-table
     *ngIf="!isLoading"
     [columns]="[

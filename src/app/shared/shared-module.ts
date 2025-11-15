@@ -22,6 +22,8 @@ import { CrearProductoForm } from './forms/crear-producto-form/crear-producto-fo
 import { CrearSubcategoriaForm } from './forms/crear-subcategoria-form/crear-subcategoria-form';
 import { CrearClienteForm } from './forms/crear-cliente-form/crear-cliente-form';
 import { CrearSalonForm } from './forms/crear-salon-form/crear-salon-form';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 @NgModule({
   declarations: [
     Header,
@@ -71,6 +73,8 @@ import { CrearSalonForm } from './forms/crear-salon-form/crear-salon-form';
     CrearClienteForm,
     CrearSalonForm,
     FormsModule,
+    ToastModule,
   ],
+  providers: [MessageService],
 })
 export class SharedModule {}

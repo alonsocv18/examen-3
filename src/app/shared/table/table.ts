@@ -9,6 +9,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class Table {
   @Input() columns: { field: string; header: string }[] = [];
   @Input() data: any[] = [];
+  @Input() stateField: string = 'customer_state'; // Campo que contiene el estado ('1' o '0')
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
 
@@ -18,5 +19,9 @@ export class Table {
 
   onDelete(row: any) {
     this.delete.emit(row);
+  }
+
+  isActive(row: any): boolean {
+    return row[this.stateField] === '1' || row[this.stateField] === 1;
   }
 }
