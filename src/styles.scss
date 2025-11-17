@@ -80,12 +80,12 @@ p-button {
 
 /* Content */
 .page-section__content {
-  @apply flex flex-1 overflow-hidden gap-2;
+  @apply flex h-145 overflow-hidden gap-2;
 }
 
 /* Sidebar */
 .page-section__sidebar {
-  @apply flex flex-col w-80;
+  @apply flex flex-col w-80 overflow-hidden;
 }
 
 .page-section__sidebar-header {
@@ -111,7 +111,7 @@ p-button {
 
 /* List */
 .page-section__list {
-  @apply flex-1 overflow-y-auto px-4 py-2;
+  @apply flex-1 overflow-y-scroll px-4 py-2;
 }
 
 /* Item */
@@ -206,7 +206,7 @@ p-button {
 }
 
 .page-section__table-body {
-  @apply flex-1 overflow-y-auto;
+  @apply flex-1;
 }
 
 .page-section__table-row {

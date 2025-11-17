@@ -42,6 +42,10 @@ export class CategoriasProductos implements OnInit {
               ...cat,
               productCount: parseInt(cat.cantidad_productos?.toString() || '0', 10),
             }));
+          // this.categorias = response.data.map((cat: Category) => ({
+          //   ...cat,
+          //   productCount: parseInt(cat.cantidad_productos?.toString() || '0', 10),
+          // }));
         } else {
           this.categorias = [];
         }

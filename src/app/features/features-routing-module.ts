@@ -10,6 +10,12 @@ const routes: Routes = [
     path: '',
     component: Admin,
     children: [
+      // Aquí me redirige a /salones mesas por defecto al entrar en /admin
+      {
+        path: '',
+        redirectTo: 'salones-mesas',
+        pathMatch: 'full',
+      },
       {
         path: 'salones-mesas',
         component: SalonesMesas,
